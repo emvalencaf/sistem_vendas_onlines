@@ -5,7 +5,7 @@ export class CreateAddressDTO {
   complement: string;
 
   @IsInt()
-  numberAddress: string;
+  numberAddress: number;
 
   @IsString()
   cep: string;

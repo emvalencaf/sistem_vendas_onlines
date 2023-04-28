@@ -3,6 +3,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   UsePipes,
   ValidationPipe,
@@ -14,6 +15,7 @@ import { ReturnedUserDTO } from './dtos/returned-user.dto';
 
 // services
 import { UserService } from './user.service';
+import { UserEntity } from './entity/user.entity';
 
 // controller
 @Controller('users')
@@ -38,5 +40,9 @@ export class UserController {
     return (await this.userService.getAllUsers()).map(
       (userEntity) => new ReturnedUserDTO(userEntity),
     );
+  }
+  @Get('/:userId')
+  async getById(@Param('userId') userId: number): Promise<UserEntity> {
+    return this.userService.getByIdWithRelAddresses(userId);
   }
 }
