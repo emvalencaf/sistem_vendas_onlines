@@ -33,6 +33,7 @@ export class UserService {
     // create user data
     const data = {
       name,
+      typeUser: 1,
       password: passwordHash,
       cpf,
       phone,
