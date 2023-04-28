@@ -10,6 +10,8 @@ import {
 
 // services
 import { AddressService } from './address.service';
+import { UserService } from '../user/user.service';
+import { CityService } from '../city/city.service';
 
 // dtos
 import { CreateAddressDTO } from './dtos/create-address.dto';
@@ -20,7 +22,11 @@ import { AddressEntity } from './entity/address.entity';
 // controller
 @Controller('addresses')
 export class AddressController {
-  constructor(private readonly addressService: AddressService) {}
+  constructor(
+    private readonly addressService: AddressService,
+    private readonly userService: UserService,
+    private readonly cityService: CityService,
+  ) {}
 
   // create a new address
   @Post('/:userId')
@@ -29,6 +35,11 @@ export class AddressController {
     @Body() { complement, numberAddress, cityId, cep }: CreateAddressDTO,
     @Param('userId') userId: number,
   ): Promise<AddressEntity> {
+    // validate userId and cityId
+    await this.userService.getById(userId);
+    await this.cityService.getById(cityId);
+
+    // if userId and cityId are valid, return and create a new address
     return this.addressService.create(
       { complement, numberAddress, cep, cityId },
       userId,

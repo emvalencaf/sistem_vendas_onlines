@@ -8,9 +8,15 @@ import { AddressController } from './address.controller';
 import { AddressService } from './address.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AddressEntity } from './entity/address.entity';
+import { UserService } from '../user/user.service';
+import { CityService } from '../city/city.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([AddressEntity])],
+  imports: [
+    TypeOrmModule.forFeature([AddressEntity]),
+    UserService,
+    CityService,
+  ],
   controllers: [AddressController],
   providers: [AddressService],
   exports: [],
