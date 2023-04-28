@@ -15,7 +15,7 @@ export class StateEntity {
   id: number;
 
   @Column({ name: 'name', nullable: false })
-  name: number;
+  name: string;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
