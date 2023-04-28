@@ -15,6 +15,7 @@ import { SignInDTO } from './dtos/sign-in.dto';
 
 // entities
 import { UserEntity } from '../user/entity/user.entity';
+import { ReturnedSignInDTO } from './dtos/returned-sign-in.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -23,7 +24,9 @@ export class AuthController {
   // sign in an user
   @UsePipes(ValidationPipe)
   @Post()
-  async signIn(@Body() { email, password }: SignInDTO): Promise<UserEntity> {
+  async signIn(
+    @Body() { email, password }: SignInDTO,
+  ): Promise<ReturnedSignInDTO> {
     return await this.authService.signIn({ email, password });
   }
 }

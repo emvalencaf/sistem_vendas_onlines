@@ -7,9 +7,15 @@ import { AuthController } from './auth.controller';
 // services
 import { AuthService } from './auth.service';
 import { UserService } from '../user/user.service';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  imports: [UserService],
+  imports: [
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+    }),
+    UserService,
+  ],
   controllers: [AuthController],
   providers: [AuthService],
   exports: [],
