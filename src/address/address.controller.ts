@@ -7,6 +7,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { Roles } from '../decorators/roles.decorator';
 
 // services
 import { AddressService } from './address.service';
@@ -19,6 +20,9 @@ import { CreateAddressDTO } from './dtos/create-address.dto';
 // entities
 import { AddressEntity } from './entity/address.entity';
 
+// enums
+import { UserType } from '../enums/user-types.enum';
+
 // controller
 @Controller('addresses')
 export class AddressController {
@@ -29,6 +33,7 @@ export class AddressController {
   ) {}
 
   // create a new address
+  @Roles(UserType.User)
   @Post('/:userId')
   @UsePipes(ValidationPipe)
   async create(

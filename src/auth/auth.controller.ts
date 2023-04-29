@@ -12,9 +12,6 @@ import { AuthService } from './auth.service';
 
 // dtos
 import { SignInDTO } from './dtos/sign-in.dto';
-
-// entities
-import { UserEntity } from '../user/entity/user.entity';
 import { ReturnedSignInDTO } from './dtos/returned-sign-in.dto';
 
 @Controller('auth')
