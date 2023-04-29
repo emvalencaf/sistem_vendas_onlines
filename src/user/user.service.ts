@@ -1,5 +1,9 @@
 // decorators
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 // dtos
 import { CreateUserDTO } from './dtos/create-user.dto';
@@ -26,6 +30,12 @@ export class UserService {
     email,
     cpf,
   }: CreateUserDTO): Promise<UserEntity> {
+    // check if there is an user with same email
+    const user = await this.getByEmail(email).catch(() => undefined);
+
+    if (user)
+      throw new BadRequestException('email already registered in system');
+
     // turn password into an hash
     const salt = await genSalt();
     const passwordHash = await hash(password, salt);

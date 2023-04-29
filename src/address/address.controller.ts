@@ -34,7 +34,7 @@ export class AddressController {
 
   // create a new address
   @Roles(UserType.User)
-  @Post('/:userId')
+  @Post()
   @UsePipes(ValidationPipe)
   async create(
     @Body() { complement, numberAddress, cityId, cep }: CreateAddressDTO,
