@@ -55,12 +55,12 @@ export class UserService {
   }
 
   // get all users
-  async getAllUsers(): Promise<UserEntity[]> {
+  async getAll(): Promise<UserEntity[]> {
     return this.userRepository.find();
   }
 
   // get user by it's id with relations
-  async getByIdWithRelAddresses(userId: number): Promise<UserEntity> {
+  async getByIdWithRelations(userId: number): Promise<UserEntity> {
     return this.userRepository.findOne({
       where: {
         id: userId,
@@ -83,7 +83,9 @@ export class UserService {
       },
     });
 
-    if (!user) throw new NotFoundException('user not found it');
+    if (!user) {
+      throw new NotFoundException(`user not found it`);
+    }
 
     return user;
   }

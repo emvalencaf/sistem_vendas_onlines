@@ -37,12 +37,12 @@ export class UserController {
   // Get all users
   @Get()
   async getAllUsers(): Promise<ReturnedUserDTO[]> {
-    return (await this.userService.getAllUsers()).map(
+    return (await this.userService.getAll()).map(
       (userEntity) => new ReturnedUserDTO(userEntity),
     );
   }
   @Get('/:userId')
   async getById(@Param('userId') userId: number): Promise<UserEntity> {
-    return this.userService.getByIdWithRelAddresses(userId);
+    return this.userService.getByIdWithRelations(userId);
   }
 }
