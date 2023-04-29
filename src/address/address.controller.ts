@@ -2,7 +2,6 @@
 import {
   Body,
   Controller,
-  Param,
   Post,
   UsePipes,
   ValidationPipe,
@@ -22,6 +21,7 @@ import { AddressEntity } from './entity/address.entity';
 
 // enums
 import { UserType } from '../enums/user-types.enum';
+import { UserId } from '../decorators/user-id.decorator';
 
 // controller
 @Controller('addresses')
@@ -38,7 +38,7 @@ export class AddressController {
   @UsePipes(ValidationPipe)
   async create(
     @Body() { complement, numberAddress, cityId, cep }: CreateAddressDTO,
-    @Param('userId') userId: number,
+    @UserId('userId') userId: number,
   ): Promise<AddressEntity> {
     // validate userId and cityId
     await this.userService.getById(userId);
