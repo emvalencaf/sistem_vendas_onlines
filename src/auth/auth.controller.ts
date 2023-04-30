@@ -20,7 +20,7 @@ export class AuthController {
 
   // sign in an user
   @UsePipes(ValidationPipe)
-  @Post()
+  @Post('/sign-in')
   async signIn(
     @Body() { email, password }: SignInDTO,
   ): Promise<ReturnedSignInDTO> {

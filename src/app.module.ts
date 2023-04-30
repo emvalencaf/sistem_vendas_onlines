@@ -12,6 +12,7 @@ import { CityModule } from './city/city.module';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './guards/roles.guard';
 import { JwtModule } from '@nestjs/jwt';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { JwtModule } from '@nestjs/jwt';
       migrationsRun: true,
     }),
     UserModule,
+    AuthModule,
     StateModule,
     CityModule,
     JwtModule,

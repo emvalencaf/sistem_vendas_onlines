@@ -1,0 +1,2 @@
+// created base on userEntityListMock[0]
+export const accessTokenMock = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlclR5cGUiOjEsImlhdCI6MTY4Mjg4MDA0MCwiZXhwIjoxNjgzNDg0ODQwLCJhdWQiOiJ1c2VycyIsImlzcyI6ImxvZ2luIiwic3ViIjoiMSJ9.p0qVAyec8t3v8vsypyn2FTLvJ5_x8wSpHe5KWFeAaX0`;

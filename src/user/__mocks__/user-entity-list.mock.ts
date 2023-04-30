@@ -6,7 +6,7 @@ export const userEntityListMock: UserEntity[] = [
     id: 1,
     name: 'joão',
     email: 'jsilva@gmail.com',
-    password: '123456',
+    password: '$2b$10$iwP4s3pGqn7U.BVQhXbInuF.Zh7ZU1HoAsNK9CZRA23cj0xnrjyr.',
     phone: '123456789',
     cpf: '123456789',
     typeUser: UserType.User,

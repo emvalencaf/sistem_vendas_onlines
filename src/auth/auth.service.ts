@@ -26,9 +26,9 @@ export class AuthService {
   ) {}
 
   // create an access token
-  createToken(user: SignInPayloadDTO): string {
+  async createToken(user: SignInPayloadDTO): Promise<string> {
     try {
-      const accessToken = this.jwtService.sign(
+      const accessToken = await this.jwtService.sign(
         {
           id: user.id,
           userType: user.typeUser,
@@ -42,6 +42,7 @@ export class AuthService {
       );
       return accessToken;
     } catch (err) {
+      console.log(err);
       throw new BadRequestException(err);
     }
   }
@@ -49,19 +50,17 @@ export class AuthService {
   // sign in an user
   async signIn({ email, password }: SignInDTO): Promise<ReturnedSignInDTO> {
     // get user data by it's email
-    const user: UserEntity = await this.userService
+    const user: UserEntity | undefined = await this.userService
       .getByEmail(email)
       .catch(() => undefined);
-
     // create a flag for the match of hash password with password
-    const isMatch = await bcrypt.compare(user.password, password);
-
+    const isMatch = await bcrypt.compare(password, user?.password || '');
     if (!user || !isMatch)
       throw new BadRequestException('email or password invalid');
 
     // create the returned object with token and user data
     const returnedSignIn: ReturnedSignInDTO = {
-      accessToken: this.createToken(new SignInPayloadDTO(user)),
+      accessToken: await this.createToken(new SignInPayloadDTO(user)),
       user,
     };
     return returnedSignIn;

@@ -12,7 +12,7 @@ import { UserEntity } from '../entity/user.entity';
 // mocks
 import { userRepositoryMock } from '../__mocks__/user-repository.mock';
 import { userEntityListMock } from '../__mocks__/user-entity-list.mock';
-import { createUserMock } from '../__mocks__/user-create.mock';
+import { createUserMock } from '../__mocks__/user-create-dto.mock';
 
 describe('UserService', () => {
   let service: UserService;
