@@ -14,6 +14,7 @@ import { UserEntity } from './entity/user.entity';
 // utils
 import { genSalt, hash } from 'bcrypt';
 import { Repository } from 'typeorm';
+import { UserType } from '../enums/user-types.enum';
 
 @Injectable()
 export class UserService {
@@ -49,7 +50,7 @@ export class UserService {
     // create user data
     const data = {
       name,
-      typeUser: 1,
+      typeUser: UserType.User,
       password: passwordHash,
       cpf,
       phone,
