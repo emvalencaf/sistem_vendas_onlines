@@ -6,5 +6,6 @@ export const addressRepositoryMock = {
   provide: getRepositoryToken(AddressEntity),
   useValue: {
     save: jest.fn().mockResolvedValue(addressEntityListMock[0]),
+    find: jest.fn().mockRejectedValue(addressEntityListMock),
   },
 };

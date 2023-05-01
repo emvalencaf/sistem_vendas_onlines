@@ -2,6 +2,7 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
   UsePipes,
   ValidationPipe,
@@ -22,6 +23,7 @@ import { AddressEntity } from './entity/address.entity';
 // enums
 import { UserType } from '../enums/user-types.enum';
 import { UserId } from '../decorators/user-id.decorator';
+import { ReturnedAddressDTO } from './dtos/returned-address.dto';
 
 // controller
 @Controller('addresses')
@@ -48,6 +50,18 @@ export class AddressController {
     return this.addressService.create(
       { complement, numberAddress, cep, cityId },
       userId,
+    );
+  }
+
+  // get all addresses of an user by userId
+  @Roles(UserType.Admin)
+  @Get('/:userId')
+  @UsePipes(ValidationPipe)
+  async getAllFromUser(
+    @UserId() userId: number,
+  ): Promise<ReturnedAddressDTO[]> {
+    return (await this.addressService.getAllFromUser(userId)).map(
+      (address) => new ReturnedAddressDTO(address),
     );
   }
 }

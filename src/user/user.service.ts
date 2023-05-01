@@ -31,9 +31,15 @@ export class UserService {
     cpf,
   }: CreateUserDTO): Promise<UserEntity> {
     // check if there is an user with same email
-    const user = await this.getByEmail(email).catch(() => undefined);
+    // const user = await this.getByEmail(email).catch(() => undefined);
 
-    if (user)
+    if (
+      await this.userRepository.exist({
+        where: {
+          email,
+        },
+      })
+    )
       throw new BadRequestException('email already registered in system');
 
     // turn password into an hash
@@ -101,5 +107,19 @@ export class UserService {
     if (!user) throw new NotFoundException('user not found it');
 
     return user;
+  }
+
+  // check if exists user and return an true if exist or throw a not found exceptions if not
+  async exist(id: number): Promise<boolean | void> {
+    if (
+      !(await this.userRepository.exist({
+        where: {
+          id,
+        },
+      }))
+    )
+      throw new NotFoundException('user doesnt exists');
+
+    return true;
   }
 }

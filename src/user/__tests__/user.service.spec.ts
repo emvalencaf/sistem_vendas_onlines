@@ -51,7 +51,7 @@ describe('UserService', () => {
     });
 
     it('should return an error in method getByEmail', async () => {
-      jest.spyOn(userRepository, 'findOne').mockResolvedValue(undefined);
+      jest.spyOn(userRepository, 'findOne').mockResolvedValueOnce(undefined);
 
       expect(
         service.getByEmail(userEntityListMock[0].email),
@@ -73,12 +73,13 @@ describe('UserService', () => {
     });
 
     it('should return an error in method getById', async () => {
-      jest.spyOn(userRepository, 'findOne').mockResolvedValue(undefined);
+      jest.spyOn(userRepository, 'findOne').mockResolvedValueOnce(undefined);
 
       expect(service.getById(userEntityListMock[0].id)).rejects.toThrowError();
     });
 
     it('should return an error in method getById (DB Error)', async () => {
+      jest.spyOn(userRepository, 'findOne').mockResolvedValueOnce(undefined);
       expect(service.getById(1)).rejects.toThrowError();
     });
 
@@ -87,19 +88,23 @@ describe('UserService', () => {
 
       expect(user).toEqual(userEntityListMock[0]);
     });
+
+    it('should find if user exists by an id (exist method)', async () => {
+      jest.spyOn(userRepository, 'exist').mockResolvedValueOnce(true);
+      expect(await service.exist(userEntityListMock[0].id)).toEqual(true);
+    });
   });
 
   describe('Create', () => {
     it('should created an user (create method)', async () => {
-      jest.spyOn(userRepository, 'findOne').mockResolvedValue(undefined);
-
+      jest.spyOn(userRepository, 'exist').mockResolvedValueOnce(false);
       const user = await service.create(createUserMock);
 
       expect(user).toEqual(userEntityListMock[0]);
     });
 
     it('should returned an error if user already exists (create method)', async () => {
-      // expect(service.create(createUserMock)).rejects.toThrowError();
+      expect(service.create(createUserMock)).rejects.toThrowError();
     });
   });
 });

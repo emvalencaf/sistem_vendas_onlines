@@ -1,5 +1,5 @@
 // decorators
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 // entities
@@ -29,5 +29,25 @@ export class AddressService {
       cep,
       cityId,
     });
+  }
+
+  // read all addresses from an user
+  async getAllFromUser(userId: number): Promise<AddressEntity[]> {
+    const addresses: AddressEntity[] | undefined = await this.addressRepository
+      .find({
+        where: {
+          userId,
+        },
+        relations: {
+          city: {
+            state: true,
+          },
+        },
+      })
+      .catch(() => undefined);
+
+    if (!addresses) throw new NotFoundException('addresses not found it');
+
+    return addresses;
   }
 }

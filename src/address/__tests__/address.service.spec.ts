@@ -40,4 +40,16 @@ describe('AddressService', () => {
       expect(address).toEqual(addressEntityListMock[0]);
     });
   });
+  describe('Read', () => {
+    it('should read all addresses of an user (getAllFromUser method)', async () => {
+      const result: AddressEntity[] = addressEntityListMock.filter(
+        (address) => address.userId === userEntityListMock[0].id,
+      );
+      jest
+        .spyOn(addressRepositoryMock.useValue, 'find')
+        .mockResolvedValueOnce(result);
+      const addresses = await service.getAllFromUser(userEntityListMock[0].id);
+      expect(addresses).toEqual(result);
+    });
+  });
 });
