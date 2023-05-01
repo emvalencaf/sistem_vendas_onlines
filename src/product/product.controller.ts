@@ -1,5 +1,12 @@
 // decorators
-import { Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 // services
 import { ProductService } from './product.service';
 
@@ -14,6 +21,7 @@ import { CreateProductDTO } from './dtos/create-product.dto';
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
+  // get all product from a category
   @Get('/:categoryId')
   async getAllFromCategory(
     @Param('categoryId') categoryId: number,
@@ -23,12 +31,16 @@ export class ProductController {
     );
   }
 
+  // create a product
   @Roles(UserType.Admin)
-  @Post('/:categoryId')
-  async create(
-    {}: CreateProductDTO,
-    @Param('categoryId') categoryId: number,
-  ): Promise<ProductEntity> {
-    return await this.productService.create({});
+  @UsePipes(ValidationPipe)
+  @Post()
+  async create({
+    name,
+    price,
+    image,
+    categoryId,
+  }: CreateProductDTO): Promise<ProductEntity> {
+    return await this.productService.create({ name, price, image, categoryId });
   }
 }

@@ -6,5 +6,7 @@ export const productRepositoryMock = {
   provide: getRepositoryToken(ProductEntity),
   useValue: {
     find: jest.fn().mockResolvedValue(productEntityListMock),
+    save: jest.fn().mockResolvedValue(productEntityListMock[0]),
+    exist: jest.fn().mockResolvedValue(true),
   },
 };

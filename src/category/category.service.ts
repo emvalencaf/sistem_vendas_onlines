@@ -75,4 +75,37 @@ export class CategoryService {
 
     return category;
   }
+
+  // get a category by id
+  async getById(categoryId: number): Promise<CategoryEntity> {
+    const category: CategoryEntity = await this.categoryRepository
+      .findOne({
+        where: {
+          id: categoryId,
+        },
+      })
+      .catch((err) => {
+        console.log(err);
+        throw new InternalServerErrorException('Database error');
+      });
+
+    if (!category)
+      throw new NotFoundException('no category found in the database');
+
+    return category;
+  }
+
+  // check if category exists
+  async exist(categoryId: number): Promise<boolean | void> {
+    if (
+      !(await this.categoryRepository.exist({
+        where: {
+          id: categoryId,
+        },
+      }))
+    )
+      throw new NotFoundException('category doesnt exists');
+
+    return true;
+  }
 }

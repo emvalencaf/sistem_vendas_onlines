@@ -59,8 +59,6 @@ describe('CategoryService', () => {
     });
 
     it('should throw an error if occors an error in database while creating a category (create method)', async () => {
-      const result: CategoryEntity = categoryEntityListMock[0];
-
       jest
         .spyOn(categoryRepositoryMock.useValue, 'save')
         .mockRejectedValueOnce(new Error('error on database'));
@@ -135,6 +133,62 @@ describe('CategoryService', () => {
           await service.getByName(undefined);
         } catch (err) {
           expect(err.message).toEqual('Database error');
+        }
+      });
+    });
+
+    describe('getById method', () => {
+      it('should return a category', async () => {
+        const category: CategoryEntity = await service.getById(
+          categoryEntityListMock[0].id,
+        );
+
+        expect(category).toEqual(categoryEntityListMock[0]);
+      });
+
+      it('should throw an error when fetch a no category', async () => {
+        jest
+          .spyOn(categoryRepositoryMock.useValue, 'findOne')
+          .mockResolvedValueOnce(undefined);
+
+        try {
+          await service.getById(categoryEntityListMock[0].id);
+        } catch (err) {
+          expect(err.message).toEqual('no category found in the database');
+        }
+      });
+
+      it('should throw an error when occours a db error', async () => {
+        jest
+          .spyOn(categoryRepositoryMock.useValue, 'findOne')
+          .mockRejectedValueOnce(new Error('Database error'));
+
+        try {
+          await service.getById(undefined);
+        } catch (err) {
+          expect(err.message).toEqual('Database error');
+        }
+      });
+    });
+
+    describe('exist method', () => {
+      it('should returned a boolean value true', async () => {
+        jest
+          .spyOn(categoryRepositoryMock.useValue, 'exist')
+          .mockResolvedValue(true);
+
+        expect(await service.exist(categoryEntityListMock[0].id)).toEqual(true);
+      });
+
+      it('should throw an error when not found it a category', async () => {
+        jest
+          .spyOn(categoryRepositoryMock.useValue, 'exist')
+          .mockResolvedValue(false);
+
+        try {
+          await service.exist(categoryEntityListMock[0].id);
+        } catch (err) {
+          expect(err.message).toEqual('category doesnt exists');
         }
       });
     });
