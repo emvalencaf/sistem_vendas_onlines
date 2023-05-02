@@ -7,14 +7,17 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
+// services
+import { CategoryService } from '../category/category.service';
+
+// dtos
+import { CreateProductDTO } from './dtos/create-product.dto';
+import { UpdateProductDTO } from './dtos/update-product.dto';
+import { PartialUpdateProductDTO } from './dtos/partial-update-product.dto';
+
 // entities
 import { ProductEntity } from './entity/product.entity';
 import { Repository, UpdateResult } from 'typeorm';
-import { CreateProductDTO } from './dtos/create-product.dto';
-import { CategoryService } from '../category/category.service';
-import { UpdateProductDTO } from './dtos/update-product.dto';
-import { PartialUpdateProductDTO } from './dtos/partial-update-product.dto';
-import { plainToClass } from 'class-transformer';
 
 @Injectable()
 export class ProductService {

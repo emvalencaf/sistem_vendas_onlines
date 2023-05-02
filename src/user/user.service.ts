@@ -1,8 +1,11 @@
 // decorators
 import {
   BadRequestException,
+  Inject,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
+  forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 // dtos
@@ -13,14 +16,18 @@ import { UserEntity } from './entity/user.entity';
 
 // utils
 import { genSalt, hash } from 'bcrypt';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { UserType } from '../enums/user-types.enum';
+import { UpdateUserPasswordDTO } from './dtos/update-user-password.dto';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+    @Inject(forwardRef(() => AuthService))
+    private readonly authService: AuthService,
   ) {}
 
   // create a new user
@@ -44,8 +51,7 @@ export class UserService {
       throw new BadRequestException('email already registered in system');
 
     // turn password into an hash
-    const salt = await genSalt();
-    const passwordHash = await hash(password, salt);
+    const passwordHash = await this.authService.createHashedPassword(password);
 
     // create user data
     const data = {
@@ -64,6 +70,45 @@ export class UserService {
   // get all users
   async getAll(): Promise<UserEntity[]> {
     return this.userRepository.find();
+  }
+
+  // change user's password
+  async updatePassword(
+    { newPassword, lastPassword }: UpdateUserPasswordDTO,
+    userId: number,
+  ): Promise<boolean> {
+    // get user data from id
+    const user = await this.getById(userId);
+
+    // check if last password match password in database
+    if (!(await this.authService.validatePassword(lastPassword, user.password)))
+      throw new BadRequestException('invalid password');
+
+    // create a hash password for new password
+    const newHashedPassword = await this.authService.createHashedPassword(
+      newPassword,
+    );
+
+    // updated user in database
+    const result: UpdateResult | undefined = await this.userRepository
+      .update(
+        {
+          id: userId,
+        },
+        {
+          password: newHashedPassword,
+        },
+      )
+      .then((result) => result)
+      .catch((err) => {
+        console.log(err);
+        return undefined;
+      });
+
+    if (!result || result?.affected === 0)
+      throw new InternalServerErrorException('error on database');
+
+    return !!result;
   }
 
   // get user by it's id with relations

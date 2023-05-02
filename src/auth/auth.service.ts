@@ -1,5 +1,11 @@
 // decorators
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  forwardRef,
+  Inject,
+} from '@nestjs/common';
 
 // services
 import { UserService } from '../user/user.service';
@@ -21,8 +27,9 @@ export class AuthService {
   private issuer = 'login';
   private audience = 'users';
   constructor(
-    private readonly userService: UserService,
     private readonly jwtService: JwtService,
+    @Inject(forwardRef(() => UserService))
+    private readonly userService: UserService,
   ) {}
 
   // create an access token
@@ -64,5 +71,32 @@ export class AuthService {
       user,
     };
     return returnedSignIn;
+  }
+
+  // create a hashed password
+  async createHashedPassword(password: string): Promise<string> {
+    const salt = await bcrypt.genSalt().catch((err) => {
+      console.log(err);
+      throw new InternalServerErrorException('error on server');
+    });
+    const passwordHash = await bcrypt.hash(password, salt).catch((err) => {
+      console.log(err);
+      throw new InternalServerErrorException('error on server');
+    });
+    return passwordHash;
+  }
+
+  // validation password
+  async validatePassword(
+    password: string,
+    hashedPassword = '',
+  ): Promise<boolean> {
+    return bcrypt
+      .compare(password, hashedPassword)
+      .then((result) => result)
+      .catch((err) => {
+        console.log(err);
+        return false;
+      });
   }
 }

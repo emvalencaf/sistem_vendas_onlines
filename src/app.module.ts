@@ -1,5 +1,5 @@
 // decorators
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 
 // modules
 import { UserModule } from './user/user.module';
@@ -32,8 +32,8 @@ import { ProductModule } from './product/product.module';
       migrations: [`${__dirname}/migration/{.ts,*.js}`],
       migrationsRun: true,
     }),
-    UserModule,
-    AuthModule,
+    forwardRef(() => UserModule),
+    forwardRef(() => AuthModule),
     StateModule,
     CityModule,
     CategoryModule,

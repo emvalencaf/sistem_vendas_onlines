@@ -1,7 +1,6 @@
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { ProductEntity } from '../entity/product.entity';
 import { productEntityListMock } from './product-entity-list.mock';
-import { updateProductDTOMock } from './update-product-dto.mock';
 
 export const productRepositoryMock = {
   provide: getRepositoryToken(ProductEntity),

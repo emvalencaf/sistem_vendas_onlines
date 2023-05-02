@@ -14,6 +14,8 @@ import { signInPayloadDTOMock } from '../__mocks__/sign-in-payload-dto.mock';
 import { accessTokenMock } from '../__mocks__/access-token.mock';
 import { signInDTOMock } from '../__mocks__/sign-in-dto.mock';
 import { returnedSignInDTOMock } from '../__mocks__/returned-sign-in.mock';
+import { createUserDTOMock } from '../../user/__mocks__/user-create-dto.mock';
+import { userEntityListMock } from '../../user/__mocks__/user-entity-list.mock';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -43,6 +45,7 @@ describe('AuthService', () => {
 
   describe('Authentication', () => {
     it('should sign in an user', async () => {
+      jest.spyOn(service, 'validatePassword').mockResolvedValueOnce(true);
       const returnedSignIn: ReturnedSignInDTO = await service.signIn(
         signInDTOMock,
       );
@@ -67,6 +70,18 @@ describe('AuthService', () => {
           password: signInDTOMock.password,
         }),
       ).rejects.toThrowError();
+    });
+  });
+
+  describe('Hash Password', () => {
+    describe('validatiePassword', () => {
+      it('should validate a hash password', async () => {
+        const result: boolean = await service.validatePassword(
+          createUserDTOMock.password,
+          userEntityListMock[0].password,
+        );
+        expect(result).toEqual(true);
+      });
     });
   });
 });
