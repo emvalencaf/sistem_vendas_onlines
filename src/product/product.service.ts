@@ -9,9 +9,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 // entities
 import { ProductEntity } from './entity/product.entity';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { CreateProductDTO } from './dtos/create-product.dto';
 import { CategoryService } from '../category/category.service';
+import { UpdateProductDTO } from './dtos/update-product.dto';
+import { PartialUpdateProductDTO } from './dtos/partial-update-product.dto';
+import { plainToClass } from 'class-transformer';
 
 @Injectable()
 export class ProductService {
@@ -75,5 +78,131 @@ export class ProductService {
       throw new NotFoundException('no product found in database');
 
     return products;
+  }
+
+  // delete a product
+  async delete(productId: number): Promise<boolean> {
+    await this.exist(productId);
+
+    const isDelete: boolean | undefined = await this.productRepository
+      .delete({
+        id: productId,
+      })
+      .then(() => true)
+      .catch(() => false);
+
+    return isDelete;
+  }
+
+  // get a product by id
+  async getById(productId: number): Promise<ProductEntity> {
+    const product: ProductEntity = await this.productRepository
+      .findOne({
+        where: {
+          id: productId,
+        },
+      })
+      .catch((err) => {
+        console.log(err);
+        throw new InternalServerErrorException('error on database');
+      });
+
+    if (!product)
+      throw new NotFoundException('no product found in the database');
+
+    return product;
+  }
+
+  // check if product exists
+  async exist(productId: number): Promise<boolean> {
+    if (
+      !(await this.productRepository.exist({
+        where: {
+          id: productId,
+        },
+      }))
+    )
+      throw new NotFoundException('product doesnt exists');
+
+    return true;
+  }
+
+  // partial update a product
+  async partialUpdate(
+    { name, price, image, categoryId }: PartialUpdateProductDTO,
+    productId: number,
+  ): Promise<ProductEntity> {
+    await this.exist(productId);
+
+    const data: PartialUpdateProductDTO = {};
+
+    if (name) data.name = name;
+
+    if (price) data.price = price;
+
+    if (image) data.image = image;
+
+    if (categoryId) data.categoryId = categoryId;
+
+    const result: UpdateResult | undefined = await this.productRepository
+      .update(
+        {
+          id: productId,
+        },
+        data,
+      )
+      .then((result) => result)
+      .catch((err) => {
+        console.log(err);
+        return undefined;
+      });
+
+    console.log(result);
+
+    if (!result || result?.affected === 0)
+      throw new InternalServerErrorException('error on database');
+
+    const updated: ProductEntity = await this.getById(productId);
+
+    return updated;
+  }
+
+  // full update a product
+  async update(
+    { name, price, image, categoryId }: UpdateProductDTO,
+    productId: number,
+  ): Promise<ProductEntity> {
+    await this.exist(productId);
+
+    if (!name || !price || !image || !categoryId)
+      throw new BadRequestException(
+        'name, price, image and category are required',
+      );
+
+    const data: UpdateProductDTO = {
+      name,
+      price,
+      image,
+      categoryId,
+    };
+
+    const result: UpdateResult | undefined = await this.productRepository
+      .update(
+        {
+          id: productId,
+        },
+        data,
+      )
+      .then((result) => result)
+      .catch((err) => {
+        console.log(err);
+        return undefined;
+      });
+    if (!result || result?.affected === 0)
+      throw new InternalServerErrorException('error on database');
+
+    const updated: ProductEntity = await this.getById(productId);
+
+    return updated;
   }
 }

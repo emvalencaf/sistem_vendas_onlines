@@ -1,6 +1,7 @@
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { ProductEntity } from '../entity/product.entity';
 import { productEntityListMock } from './product-entity-list.mock';
+import { updateProductDTOMock } from './update-product-dto.mock';
 
 export const productRepositoryMock = {
   provide: getRepositoryToken(ProductEntity),
@@ -8,5 +9,11 @@ export const productRepositoryMock = {
     find: jest.fn().mockResolvedValue(productEntityListMock),
     save: jest.fn().mockResolvedValue(productEntityListMock[0]),
     exist: jest.fn().mockResolvedValue(true),
+    findOne: jest.fn().mockResolvedValue(productEntityListMock[0]),
+    delete: jest.fn().mockResolvedValue(true),
+    update: jest.fn().mockResolvedValue({
+      affected: 1,
+      raw: {},
+    }),
   },
 };
