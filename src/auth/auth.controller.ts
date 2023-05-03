@@ -13,7 +13,6 @@ import { AuthService } from './auth.service';
 // dtos
 import { SignInDTO } from './dtos/sign-in.dto';
 import { ReturnedSignInDTO } from './dtos/returned-sign-in.dto';
-import { UserType } from '../enums/user-types.enum';
 
 @Controller('auth')
 export class AuthController {
