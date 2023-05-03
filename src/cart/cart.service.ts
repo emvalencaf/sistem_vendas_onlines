@@ -15,7 +15,7 @@ import {
   Repository,
 } from 'typeorm';
 import { InsertInCartDTO } from './dtos/insert-in-cart.dto';
-import { CartProductService } from '../cartProduct/cartProduct.service';
+import { CartProductService } from '../cart-product/cart-product.service';
 import { ExistCartDTO } from './dtos/exist-cart.dto';
 import { UpdateInCartDTO } from './dtos/update-in-cart.dto';
 

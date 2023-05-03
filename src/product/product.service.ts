@@ -119,11 +119,16 @@ export class ProductService {
   // check if product exists
   async exist(productId: number): Promise<boolean> {
     if (
-      !(await this.productRepository.exist({
-        where: {
-          id: productId,
-        },
-      }))
+      !(await this.productRepository
+        .exist({
+          where: {
+            id: productId,
+          },
+        })
+        .catch((err) => {
+          console.log(err);
+          throw new InternalServerErrorException('error on database');
+        }))
     )
       throw new NotFoundException('product doesnt exists');
 

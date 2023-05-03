@@ -1,4 +1,4 @@
-import { IsBoolean, IsNumber, IsOptional, isNumber } from 'class-validator';
+import { IsBoolean, IsNumber, IsOptional } from 'class-validator';
 
 export class ExistCartDTO {
   @IsNumber()

@@ -4,7 +4,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CartProductEntity } from './entity/cartProduct.entity';
+import { CartProductEntity } from './entity/cart-product.entity';
 import { DeleteResult, Repository } from 'typeorm';
 import { InsertInCartDTO } from '../cart/dtos/insert-in-cart.dto';
 import { ProductService } from '../product/product.service';
@@ -59,11 +59,19 @@ export class CartProductService {
     { productId, amount }: InsertInCartDTO,
     cartId: number,
   ): Promise<CartProductEntity> {
-    return this.cartProductRepository.save({
-      productId,
-      amount,
-      cartId,
-    });
+    // check if product exists
+    await this.productService.exist(productId);
+
+    return this.cartProductRepository
+      .save({
+        productId,
+        amount,
+        cartId,
+      })
+      .catch((err) => {
+        console.log(err);
+        throw new InternalServerErrorException('error on database');
+      });
   }
 
   // delete cart product
@@ -71,7 +79,13 @@ export class CartProductService {
     productId: number,
     cartId: number,
   ): Promise<DeleteResult> {
-    return this.cartProductRepository.delete({ productId, cartId });
+    await this.exist(productId, cartId);
+    return this.cartProductRepository
+      .delete({ productId, cartId })
+      .catch((err) => {
+        console.log(err);
+        throw new InternalServerErrorException('error on database');
+      });
   }
 
   // insert a product in cart
@@ -79,9 +93,6 @@ export class CartProductService {
     { productId, amount }: InsertInCartDTO,
     cartId: number,
   ) {
-    // check if product exists
-    await this.productService.exist(productId);
-
     // check if cart product exist
     const isExist: boolean = await this.exist(productId, cartId).catch(
       () => false,
@@ -103,15 +114,23 @@ export class CartProductService {
       cartId,
     );
 
+    // check if product exists
+    await this.productService.exist(productId);
+
     // updated cart product data with the new amount
-    return this.cartProductRepository.save({ ...cartProduct, amount });
+    return this.cartProductRepository
+      .save({ ...cartProduct, amount })
+      .catch((err) => {
+        console.log(err);
+        throw new InternalServerErrorException('error on database');
+      });
   }
 
   // update a product in cart
   async updateProductIn(
     { productId, amount }: UpdateInCartDTO,
     cartId: number,
-  ) {
+  ): Promise<CartProductEntity> {
     // check if product exists
     await this.productService.exist(productId);
 
@@ -125,6 +144,11 @@ export class CartProductService {
     );
 
     // updated cart product data with the new amount
-    return this.cartProductRepository.save({ ...cartProduct, amount });
+    return this.cartProductRepository
+      .save({ ...cartProduct, amount })
+      .catch((err) => {
+        console.log(err);
+        throw new InternalServerErrorException('error on database');
+      });
   }
 }

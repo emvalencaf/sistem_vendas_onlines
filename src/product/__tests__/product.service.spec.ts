@@ -178,6 +178,16 @@ describe('ProductService', () => {
           expect(err.message).toEqual('product doesnt exists');
         }
       });
+      it('should throw an error when occours an error on database', async () => {
+        jest
+          .spyOn(productRepositoryMock.useValue, 'exist')
+          .mockRejectedValueOnce(new Error('error on database'));
+        try {
+          await service.exist(productEntityListMock[0].id);
+        } catch (err) {
+          expect(err.message).toEqual('error on database');
+        }
+      });
     });
   });
 

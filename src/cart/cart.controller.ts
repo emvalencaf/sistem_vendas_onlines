@@ -16,7 +16,6 @@ import { InsertInCartDTO } from './dtos/insert-in-cart.dto';
 import { UserId } from '../decorators/user-id.decorator';
 import { ReturnedCartDTO } from './dtos/returned-cart.dto';
 import { DeleteResult } from 'typeorm';
-import { CartEntity } from './entity/cart.entity';
 import { UpdateInCartDTO } from './dtos/update-in-cart.dto';
 
 @Controller('carts')

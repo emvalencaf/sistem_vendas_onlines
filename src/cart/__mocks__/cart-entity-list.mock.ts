@@ -1,0 +1,12 @@
+import { userEntityListMock } from '../../user/__mocks__/user-entity-list.mock';
+import { CartEntity } from '../entity/cart.entity';
+
+export const cartEntityListMock: CartEntity[] = [
+  {
+    id: 1,
+    userId: userEntityListMock[0].id,
+    active: true,
+    updatedAt: new Date(),
+    createdAt: new Date(),
+  },
+];
