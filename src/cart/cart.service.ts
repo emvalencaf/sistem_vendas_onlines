@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 // entities
 import { CartEntity } from './entity/cart.entity';
-import { Repository } from 'typeorm';
+import { FindOptionsRelations, Repository } from 'typeorm';
 import { InsertInCartDTO } from './dtos/insert-in-cart.dto';
 import { CartProductService } from '../cartProduct/cartProduct.service';
 
@@ -16,11 +16,40 @@ export class CartService {
     private readonly cartProductService: CartProductService,
   ) {}
 
-  // get cart by user id
-  async getByUserId(userId: number): Promise<CartEntity> {
+  // get active cart by user id
+  async getByUserId(
+    userId: number,
+    isRelations?: boolean,
+  ): Promise<CartEntity> {
+    // check if will returned a cart with relations on
+    const relations: FindOptionsRelations<CartEntity> | undefined = isRelations
+      ? {
+          cartProducts: {
+            product: true,
+          },
+        }
+      : undefined;
+
+    // fetch cart data from database
     const cart: CartEntity = await this.cartRepository.findOne({
       where: {
         userId,
+        active: true,
+      },
+      relations,
+    });
+
+    // thrown an exception if no active cart related to user id was found it
+    if (!cart) throw new NotFoundException('no cart was found in database');
+
+    return cart;
+  }
+
+  // get cart by id
+  async getById(cartId: number): Promise<CartEntity> {
+    const cart: CartEntity = await this.cartRepository.findOne({
+      where: {
+        id: cartId,
       },
     });
 
@@ -30,12 +59,10 @@ export class CartService {
   }
 
   // check if there's a cart active related to user
-  async isCartActive(userId: number): Promise<CartEntity> {
-    const cart: CartEntity = await this.getByUserId(userId)
-      .then((result) => result)
-      .catch(async () => this.create(userId));
+  async isCartActive(cartId: number): Promise<boolean> {
+    const cart: CartEntity = await this.getById(cartId);
 
-    return cart;
+    return cart.active === true;
   }
 
   // create a cart
@@ -51,7 +78,10 @@ export class CartService {
     { productId, amount }: InsertInCartDTO,
     userId: number,
   ): Promise<CartEntity> {
-    const cart: CartEntity = await this.isCartActive(userId);
+    // get cart by user id
+    const cart: CartEntity = await this.getByUserId(userId, true)
+      // if ain't not cart or cart activate, create a new one
+      .catch(async () => this.create(userId));
 
     await this.cartProductService.insertProductIn(
       {

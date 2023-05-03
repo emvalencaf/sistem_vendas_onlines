@@ -8,9 +8,9 @@ import {
 import { CartService } from './cart.service';
 import { Roles } from '../decorators/roles.decorator';
 import { UserType } from '../enums/user-types.enum';
-import { CartEntity } from './entity/cart.entity';
 import { InsertInCartDTO } from './dtos/insert-in-cart.dto';
 import { UserId } from '../decorators/user-id.decorator';
+import { ReturnedCartDTO } from './dtos/returned-cart.dto';
 
 @Controller('carts')
 export class CartController {
@@ -22,13 +22,15 @@ export class CartController {
   async insertProductIn(
     @Body() { productId, amount }: InsertInCartDTO,
     @UserId() userId: number,
-  ): Promise<CartEntity> {
-    return this.cartService.insertProductIn(
-      {
-        productId,
-        amount,
-      },
-      userId,
+  ): Promise<ReturnedCartDTO> {
+    return new ReturnedCartDTO(
+      await this.cartService.insertProductIn(
+        {
+          productId,
+          amount,
+        },
+        userId,
+      ),
     );
   }
 }

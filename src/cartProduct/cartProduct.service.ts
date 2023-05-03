@@ -4,12 +4,14 @@ import { CartProductEntity } from './entity/cartProduct.entity';
 import { Repository } from 'typeorm';
 import { InsertInCartDTO } from '../cart/dtos/insert-in-cart.dto';
 import { CartEntity } from '../cart/entity/cart.entity';
+import { ProductService } from '../product/product.service';
 
 @Injectable()
 export class CartProductService {
   constructor(
     @InjectRepository(CartProductEntity)
     private readonly cartProductRepository: Repository<CartProductEntity>,
+    private readonly productService: ProductService,
   ) {}
 
   // get a cart product by its product id and cart id
@@ -56,6 +58,21 @@ export class CartProductService {
     });
   }
 
+  // check if cart product exists
+  async exist(productId: number, cartId: number): Promise<boolean> {
+    if (
+      !(await this.cartProductRepository.exist({
+        where: {
+          id: productId,
+          cartId,
+        },
+      }))
+    )
+      throw new NotFoundException('cart product doesnt exists');
+
+    return true;
+  }
+
   // create cart product related to a cart
   async create(
     { productId, amount }: InsertInCartDTO,
@@ -73,6 +90,31 @@ export class CartProductService {
     { productId, amount }: InsertInCartDTO,
     cart: CartEntity,
   ) {
-    return this.isCartProductExist({ productId, amount }, cart.id);
+    // check if product exists
+    await this.productService.exist(productId);
+
+    // check if cart product exist
+    const isExist: boolean = await this.exist(productId, cart.id).catch(
+      () => false,
+    );
+
+    // if doesn't exists, create a new one
+    if (!isExist)
+      return this.create(
+        {
+          productId,
+          amount,
+        },
+        cart.id,
+      );
+
+    // fetched cart product data
+    const cartProduct: CartProductEntity = await this.getByProductIdAndCartId(
+      productId,
+      cart.id,
+    );
+
+    // updated cart product data with the new amount
+    return this.cartProductRepository.save({ ...cartProduct, amount });
   }
 }
