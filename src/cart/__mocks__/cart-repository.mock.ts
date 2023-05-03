@@ -1,9 +1,11 @@
 import { CartEntity } from '../entity/cart.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { cartEntityListMock } from './cart-entity-list.mock';
 
 export const cartRepositoryMock = {
   provide: getRepositoryToken(CartEntity),
   useValue: {
-    save: jest.fn(),
+    findOne: jest.fn().mockResolvedValue(cartEntityListMock[0]),
+    save: jest.fn().mockResolvedValue(cartEntityListMock[0]),
   },
 };

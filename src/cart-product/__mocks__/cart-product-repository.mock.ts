@@ -1,7 +1,10 @@
-import { getRepositoryToken } from '@nestjs/typeorm';
+// entities and tools
 import { CartProductEntity } from '../entity/cart-product.entity';
-import { cartProductEntityListMock } from './cart-product-entity-list.mock';
+import { getRepositoryToken } from '@nestjs/typeorm';
 import { DeleteResult } from 'typeorm';
+
+// mocks
+import { cartProductEntityListMock } from './cart-product-entity-list.mock';
 
 export const cartProductRepositoryMock = {
   provide: getRepositoryToken(CartProductEntity),
