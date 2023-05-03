@@ -1,12 +1,17 @@
 // decorators
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 // entities
 import { CartEntity } from './entity/cart.entity';
-import { FindOptionsRelations, Repository } from 'typeorm';
+import { FindOptionsRelations, FindOptionsWhere, Repository } from 'typeorm';
 import { InsertInCartDTO } from './dtos/insert-in-cart.dto';
 import { CartProductService } from '../cartProduct/cartProduct.service';
+import { ExistCartDTO } from './dtos/exist-cart.dto';
 
 @Injectable()
 export class CartService {
@@ -15,6 +20,27 @@ export class CartService {
     private readonly cartRepository: Repository<CartEntity>,
     private readonly cartProductService: CartProductService,
   ) {}
+
+  // clear cart
+  async clear(userId: number): Promise<boolean> {
+    // get cart active by userId
+    const cart: CartEntity = await this.getByUserId(userId);
+    // update a cart toggle it active
+    const result: boolean = await this.cartRepository
+      .save({
+        ...cart,
+        active: false,
+      })
+      // if was successfully updated, returns true
+      .then(() => true)
+      // if wasnt updated, throw a internal error excetion
+      .catch((err) => {
+        console.log(err);
+        throw new InternalServerErrorException('error on database');
+      });
+
+    return result;
+  }
 
   // get active cart by user id
   async getByUserId(
@@ -73,24 +99,44 @@ export class CartService {
     });
   }
 
+  // exists active cart
+  async exist({ cartId, userId, isActive }: ExistCartDTO): Promise<boolean> {
+    // custom the where options
+    const whereOptions: FindOptionsWhere<CartEntity> = {};
+    if (cartId) whereOptions.id = cartId;
+    if (userId) whereOptions.userId = userId;
+    if (typeof isActive === 'boolean') whereOptions.active = isActive;
+    const isExist: boolean = await this.cartRepository
+      .exist({
+        where: whereOptions,
+      })
+      .catch((err) => {
+        console.log(err);
+        throw new InternalServerErrorException('error on database');
+      });
+    return isExist;
+  }
+
   // insert a product into a cart
   async insertProductIn(
     { productId, amount }: InsertInCartDTO,
     userId: number,
   ): Promise<CartEntity> {
     // get cart by user id
-    const cart: CartEntity = await this.getByUserId(userId, true)
+    const cart: CartEntity = await this.getByUserId(userId)
       // if ain't not cart or cart activate, create a new one
       .catch(async () => this.create(userId));
 
+    // insert a new cart product or increase the amount
     await this.cartProductService.insertProductIn(
       {
         productId,
         amount,
       },
-      cart,
+      cart.id,
     );
 
-    return cart;
+    // fetched new cart
+    return this.getByUserId(userId, true);
   }
 }

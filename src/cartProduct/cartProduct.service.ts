@@ -30,34 +30,6 @@ export class CartProductService {
     return cartProduct;
   }
 
-  // check if already exist a cart product
-  async isCartProductExist(
-    { productId, amount }: InsertInCartDTO,
-    cartId: number,
-  ): Promise<CartProductEntity> {
-    // get cart product by cart id and product id
-    const cartProduct: CartProductEntity | undefined =
-      await this.getByProductIdAndCartId(productId, cartId).catch(
-        () => undefined,
-      );
-
-    // if cart product wasnt found it, then create a new one
-    if (!cartProduct)
-      return this.create(
-        {
-          productId,
-          amount,
-        },
-        cartId,
-      );
-
-    // updated cart product with a new amount value
-    return this.cartProductRepository.save({
-      ...cartProduct,
-      amount: amount,
-    });
-  }
-
   // check if cart product exists
   async exist(productId: number, cartId: number): Promise<boolean> {
     if (
@@ -88,13 +60,13 @@ export class CartProductService {
   // insert a product in cart
   async insertProductIn(
     { productId, amount }: InsertInCartDTO,
-    cart: CartEntity,
+    cartId: number,
   ) {
     // check if product exists
     await this.productService.exist(productId);
 
     // check if cart product exist
-    const isExist: boolean = await this.exist(productId, cart.id).catch(
+    const isExist: boolean = await this.exist(productId, cartId).catch(
       () => false,
     );
 
@@ -105,13 +77,13 @@ export class CartProductService {
           productId,
           amount,
         },
-        cart.id,
+        cartId,
       );
 
     // fetched cart product data
     const cartProduct: CartProductEntity = await this.getByProductIdAndCartId(
       productId,
-      cart.id,
+      cartId,
     );
 
     // updated cart product data with the new amount

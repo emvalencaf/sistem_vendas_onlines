@@ -1,6 +1,8 @@
 import {
   Body,
   Controller,
+  Get,
+  Delete,
   Post,
   UsePipes,
   ValidationPipe,
@@ -16,6 +18,16 @@ import { ReturnedCartDTO } from './dtos/returned-cart.dto';
 export class CartController {
   constructor(private readonly cartService: CartService) {}
 
+  // get an active cart related to a user id
+  @Roles(UserType.Admin, UserType.User)
+  @Get()
+  async getByUserId(@UserId() userId: number): Promise<ReturnedCartDTO> {
+    return new ReturnedCartDTO(
+      await this.cartService.getByUserId(userId, true),
+    );
+  }
+
+  // insert a new cart product (or increase the amount of) on a active cart
   @Roles(UserType.Admin, UserType.User)
   @UsePipes(ValidationPipe)
   @Post()
@@ -32,5 +44,12 @@ export class CartController {
         userId,
       ),
     );
+  }
+
+  // clear up cart
+  @Roles(UserType.Admin, UserType.User)
+  @Delete()
+  async clearCart(@UserId() userId: number): Promise<boolean> {
+    return this.cartService.clear(userId);
   }
 }
