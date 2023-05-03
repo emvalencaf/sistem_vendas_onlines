@@ -89,10 +89,10 @@ export class AuthService {
   // validation password
   async validatePassword(
     password: string,
-    hashedPassword = '',
+    hashedPassword: string,
   ): Promise<boolean> {
     return bcrypt
-      .compare(password, hashedPassword)
+      .compare(password, hashedPassword || '')
       .then((result) => result)
       .catch((err) => {
         console.log(err);

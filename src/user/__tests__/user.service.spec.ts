@@ -16,6 +16,7 @@ import { createUserDTOMock } from '../__mocks__/user-create-dto.mock';
 import { authServiceMock } from '../../auth/__mocks__/auth-service.mock';
 import { newHashedPasswordMock } from '../__mocks__/new-hashed-password.mock';
 import { updateUserPasswordDTO } from '../__mocks__/update-user-password.mock';
+import { updateProductDTOMock } from '../../product/__mocks__/update-product-dto.mock';
 
 describe('UserService', () => {
   let service: UserService;
@@ -133,21 +134,6 @@ describe('UserService', () => {
   describe('Update', () => {
     describe('updatePassword method', () => {
       it('should change password', async () => {
-        jest
-          .spyOn(service, 'getById')
-          .mockRejectedValueOnce(userEntityListMock[0]);
-        jest
-          .spyOn(authServiceMock.useValue, 'validatePassword')
-          .mockResolvedValueOnce(true);
-        jest
-          .spyOn(authServiceMock.useValue, 'createHashedPassword')
-          .mockResolvedValueOnce(newHashedPasswordMock);
-        jest
-          .spyOn(userRepositoryMock.useValue, 'update')
-          .mockResolvedValueOnce({
-            affected: 1,
-            raw: {},
-          } as UpdateResult);
 
         const result: boolean = await service.updatePassword(
           updateUserPasswordDTO,
@@ -156,6 +142,45 @@ describe('UserService', () => {
 
         expect(result).toEqual(true);
       });
+
+	  it('should throw an error cause user wasnt found it', async () => {
+        jest
+          .spyOn(userRepositoryMock.useValue, 'findOne')
+          .mockRejectedValueOnce(new Error('user not found it'));
+		try {
+          await service.updatePassword(
+            updateUserPasswordDTO,
+            userEntityListMock[0].id,
+          );
+		} catch (err) {
+          expect(err.message).toEqual('user not found it');
+		}
+	  });
+
+	  it('should throw an error when lastpassword doesnt matched with password on database', async () => {
+        jest
+          .spyOn(authServiceMock.useValue, 'validatePassword')
+          .mockResolvedValueOnce(false);
+		try {
+			await service.updatePassword(updateUserPasswordDTO, 1);
+		} catch (err) {
+			expect(err.message).toEqual('invalid password');
+		}
+	  });
+
+	  it('should throw an error when occors an error on database', async () => {
+        jest
+          .spyOn(service, 'updatePassword')
+          .mockRejectedValueOnce(new Error('error on database'));
+		try {
+          await service.updatePassword(
+            updateUserPasswordDTO,
+            userEntityListMock[0].id,
+          );
+		} catch (err) {
+			expect(err.message).toEqual('error on database');
+		}
+	  });
     });
   });
 });

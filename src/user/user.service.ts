@@ -8,18 +8,20 @@ import {
   forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+
+// services
+import { AuthService } from '../auth/auth.service';
+
 // dtos
+import { UpdateUserPasswordDTO } from './dtos/update-user-password.dto';
 import { CreateUserDTO } from './dtos/create-user.dto';
 
 // entities
 import { UserEntity } from './entity/user.entity';
-
-// utils
-import { genSalt, hash } from 'bcrypt';
 import { Repository, UpdateResult } from 'typeorm';
+
+// enums
 import { UserType } from '../enums/user-types.enum';
-import { UpdateUserPasswordDTO } from './dtos/update-user-password.dto';
-import { AuthService } from '../auth/auth.service';
 
 @Injectable()
 export class UserService {
