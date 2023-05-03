@@ -134,7 +134,6 @@ describe('UserService', () => {
   describe('Update', () => {
     describe('updatePassword method', () => {
       it('should change password', async () => {
-
         const result: boolean = await service.updatePassword(
           updateUserPasswordDTO,
           userEntityListMock[0].id,
@@ -143,44 +142,44 @@ describe('UserService', () => {
         expect(result).toEqual(true);
       });
 
-	  it('should throw an error cause user wasnt found it', async () => {
+      it('should throw an error cause user wasnt found it', async () => {
         jest
           .spyOn(userRepositoryMock.useValue, 'findOne')
           .mockRejectedValueOnce(new Error('user not found it'));
-		try {
+        try {
           await service.updatePassword(
             updateUserPasswordDTO,
             userEntityListMock[0].id,
           );
-		} catch (err) {
+        } catch (err) {
           expect(err.message).toEqual('user not found it');
-		}
-	  });
+        }
+      });
 
-	  it('should throw an error when lastpassword doesnt matched with password on database', async () => {
+      it('should throw an error when lastpassword doesnt matched with password on database', async () => {
         jest
           .spyOn(authServiceMock.useValue, 'validatePassword')
           .mockResolvedValueOnce(false);
-		try {
-			await service.updatePassword(updateUserPasswordDTO, 1);
-		} catch (err) {
-			expect(err.message).toEqual('invalid password');
-		}
-	  });
+        try {
+          await service.updatePassword(updateUserPasswordDTO, 1);
+        } catch (err) {
+          expect(err.message).toEqual('invalid password');
+        }
+      });
 
-	  it('should throw an error when occors an error on database', async () => {
+      it('should throw an error when occors an error on database', async () => {
         jest
           .spyOn(service, 'updatePassword')
           .mockRejectedValueOnce(new Error('error on database'));
-		try {
+        try {
           await service.updatePassword(
             updateUserPasswordDTO,
             userEntityListMock[0].id,
           );
-		} catch (err) {
-			expect(err.message).toEqual('error on database');
-		}
-	  });
+        } catch (err) {
+          expect(err.message).toEqual('error on database');
+        }
+      });
     });
   });
 });
