@@ -27,7 +27,10 @@ export class ProductEntity {
   @CreateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
-  @OneToMany(() => CartProductEntity[], (cartProductEntity: CartProductEntity) => cartProductEntity.product)
+  @OneToMany(
+    () => CartProductEntity,
+    (cartProductEntity: CartProductEntity) => cartProductEntity.product,
+  )
   cartProducts?: CartProductEntity[];
 
   @ManyToOne(

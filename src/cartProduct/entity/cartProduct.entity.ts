@@ -10,7 +10,7 @@ import {
 import { ProductEntity } from '../../product/entity/product.entity';
 import { CartEntity } from '../../cart/entity/cart.entity';
 
-@Entity({ name: 'cart-product' })
+@Entity({ name: 'cart_product' })
 export class CartProductEntity {
   @PrimaryGeneratedColumn('rowid')
   id: number;
