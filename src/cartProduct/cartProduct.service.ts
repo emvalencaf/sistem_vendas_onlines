@@ -1,10 +1,14 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CartProductEntity } from './entity/cartProduct.entity';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { InsertInCartDTO } from '../cart/dtos/insert-in-cart.dto';
-import { CartEntity } from '../cart/entity/cart.entity';
 import { ProductService } from '../product/product.service';
+import { UpdateInCartDTO } from '../cart/dtos/update-in-cart.dto';
 
 @Injectable()
 export class CartProductService {
@@ -33,12 +37,17 @@ export class CartProductService {
   // check if cart product exists
   async exist(productId: number, cartId: number): Promise<boolean> {
     if (
-      !(await this.cartProductRepository.exist({
-        where: {
-          id: productId,
-          cartId,
-        },
-      }))
+      !(await this.cartProductRepository
+        .exist({
+          where: {
+            id: productId,
+            cartId,
+          },
+        })
+        .catch((err) => {
+          console.log(err);
+          throw new InternalServerErrorException('error on database');
+        }))
     )
       throw new NotFoundException('cart product doesnt exists');
 
@@ -55,6 +64,14 @@ export class CartProductService {
       amount,
       cartId,
     });
+  }
+
+  // delete cart product
+  async deleteProductIn(
+    productId: number,
+    cartId: number,
+  ): Promise<DeleteResult> {
+    return this.cartProductRepository.delete({ productId, cartId });
   }
 
   // insert a product in cart
@@ -79,6 +96,27 @@ export class CartProductService {
         },
         cartId,
       );
+
+    // fetched cart product data
+    const cartProduct: CartProductEntity = await this.getByProductIdAndCartId(
+      productId,
+      cartId,
+    );
+
+    // updated cart product data with the new amount
+    return this.cartProductRepository.save({ ...cartProduct, amount });
+  }
+
+  // update a product in cart
+  async updateProductIn(
+    { productId, amount }: UpdateInCartDTO,
+    cartId: number,
+  ) {
+    // check if product exists
+    await this.productService.exist(productId);
+
+    // check if cart product exist, if not it will throw an exception
+    await this.exist(productId, cartId);
 
     // fetched cart product data
     const cartProduct: CartProductEntity = await this.getByProductIdAndCartId(

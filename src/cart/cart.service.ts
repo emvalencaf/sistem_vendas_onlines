@@ -8,10 +8,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 // entities
 import { CartEntity } from './entity/cart.entity';
-import { FindOptionsRelations, FindOptionsWhere, Repository } from 'typeorm';
+import {
+  DeleteResult,
+  FindOptionsRelations,
+  FindOptionsWhere,
+  Repository,
+} from 'typeorm';
 import { InsertInCartDTO } from './dtos/insert-in-cart.dto';
 import { CartProductService } from '../cartProduct/cartProduct.service';
 import { ExistCartDTO } from './dtos/exist-cart.dto';
+import { UpdateInCartDTO } from './dtos/update-in-cart.dto';
 
 @Injectable()
 export class CartService {
@@ -138,5 +144,36 @@ export class CartService {
 
     // fetched new cart
     return this.getByUserId(userId, true);
+  }
+
+  // upate cart
+  async updateProductIn(
+    { productId, amount }: UpdateInCartDTO,
+    userId: number,
+  ): Promise<CartEntity> {
+    // get cart by user id
+    const cart: CartEntity = await this.getByUserId(userId);
+
+    // insert a new cart product or increase the amount
+    await this.cartProductService.updateProductIn(
+      {
+        productId,
+        amount,
+      },
+      cart.id,
+    );
+
+    // fetched new cart
+    return this.getByUserId(userId, true);
+  }
+
+  // delete product in a cart
+  async deleteProductIn(
+    productId: number,
+    userId: number,
+  ): Promise<DeleteResult> {
+    const cart: CartEntity = await this.getByUserId(userId);
+
+    return this.cartProductService.deleteProductIn(productId, cart.id);
   }
 }
