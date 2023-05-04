@@ -28,17 +28,20 @@ export class CartService {
   ) {}
 
   // clear cart
-  async clear(userId: number): Promise<boolean> {
+  async clear(userId: number): Promise<DeleteResult> {
     // get cart active by userId
     const cart: CartEntity = await this.getByUserId(userId);
     // update a cart toggle it active
-    const result: boolean = await this.cartRepository
+    const result: DeleteResult = await this.cartRepository
       .save({
         ...cart,
         active: false,
       })
       // if was successfully updated, returns true
-      .then(() => true)
+      .then(() => ({
+        affected: 1,
+        raw: [],
+      }))
       // if wasnt updated, throw a internal error excetion
       .catch((err) => {
         console.log(err);
@@ -99,10 +102,15 @@ export class CartService {
 
   // create a cart
   async create(userId: number): Promise<CartEntity> {
-    return this.cartRepository.save({
-      active: true,
-      userId,
-    });
+    return this.cartRepository
+      .save({
+        active: true,
+        userId,
+      })
+      .catch((err) => {
+        console.log(err);
+        throw new InternalServerErrorException('error on database');
+      });
   }
 
   // exists active cart
