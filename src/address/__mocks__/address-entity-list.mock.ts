@@ -4,8 +4,8 @@ export const addressEntityListMock: AddressEntity[] = [
   {
     id: 1,
     cityId: 1,
-    complement: '',
-    cep: '',
+    complement: 'mock complement',
+    cep: '323434',
     numberAddress: 4,
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -14,8 +14,8 @@ export const addressEntityListMock: AddressEntity[] = [
   {
     id: 2,
     cityId: 1,
-    complement: '',
-    cep: '',
+    complement: 'mock complement 2',
+    cep: '2323224',
     numberAddress: 4,
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -24,8 +24,8 @@ export const addressEntityListMock: AddressEntity[] = [
   {
     id: 3,
     cityId: 1,
-    complement: '',
-    cep: '',
+    complement: 'mocked complement 3',
+    cep: '232424234',
     numberAddress: 4,
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -34,8 +34,8 @@ export const addressEntityListMock: AddressEntity[] = [
   {
     id: 4,
     cityId: 1,
-    complement: '',
-    cep: '',
+    complement: 'mocked coomplement 4',
+    cep: '232432324',
     numberAddress: 5,
     createdAt: new Date(),
     updatedAt: new Date(),

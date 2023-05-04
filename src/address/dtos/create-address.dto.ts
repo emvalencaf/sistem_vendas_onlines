@@ -1,4 +1,4 @@
-import { IsInt, IsString } from 'class-validator/types/decorator/decorators';
+import { IsInt, IsString } from 'class-validator';
 
 export class CreateAddressDTO {
   @IsString()

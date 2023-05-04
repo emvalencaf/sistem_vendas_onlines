@@ -1,5 +1,9 @@
 // decorators
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -37,5 +41,21 @@ export class CityService {
     if (!city) throw new NotFoundException('city not found it');
 
     return city;
+  }
+
+  // check if city exists
+  async exist(cityId: number): Promise<boolean> {
+    // custom the where options
+    const isExist: boolean = await this.cityRepository
+      .exist({
+        where: {
+          id: cityId,
+        },
+      })
+      .catch((err) => {
+        console.log(err);
+        throw new InternalServerErrorException('error on database');
+      });
+    return isExist;
   }
 }

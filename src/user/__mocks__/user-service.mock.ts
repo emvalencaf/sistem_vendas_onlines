@@ -6,5 +6,6 @@ export const userServiceMock = {
   useValue: {
     getByEmail: jest.fn().mockResolvedValue(userEntityListMock[0]),
     getById: jest.fn().mockResolvedValue(userEntityListMock[0]),
+    exist: jest.fn().mockResolvedValue(true),
   },
 };

@@ -1,12 +1,18 @@
+// testing tools
 import { Test, TestingModule } from '@nestjs/testing';
+
+// services
 import { CartService } from '../cart.service';
+
+// entities
+import { CartEntity } from '../entity/cart.entity';
+import { DeleteResult } from 'typeorm';
+
+// mocks
 import { cartRepositoryMock } from '../__mocks__/cart-repository.mock';
 import { cartProductServiceMock } from '../../cart-product/__mocks__/cart-product-service.mock';
-import { CartEntity } from '../entity/cart.entity';
 import { cartEntityListMock } from '../__mocks__/cart-entity-list.mock';
-import { DeleteResult } from 'typeorm';
 import { insertInCartDTOMock } from '../__mocks__/insert-in-cart-dto.mock';
-import { userEntityListMock } from '../../user/__mocks__/user-entity-list.mock';
 
 describe('CartService', () => {
   let service: CartService;
