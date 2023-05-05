@@ -9,7 +9,7 @@ import { updateProductDTOMock } from '../__mocks__/update-product-dto.mock';
 import { partialUpdateProductDTOMock } from '../__mocks__/partial-update-product.mock';
 import { createProductDTOMock } from '../__mocks__/create-product-dto.mock';
 
-describe('CartController', () => {
+describe('ProductController', () => {
   // controller
   let controller: ProductController;
 

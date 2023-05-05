@@ -5,7 +5,7 @@ import { ReturnedCityDTO } from '../dtos/returned-city.dto';
 import { stateEntityListMock } from '../../state/__mocks__/state-entity-list.mock';
 import { cityEntityListMock } from '../__mocks__/city-entity-list.mock';
 
-describe('CartController', () => {
+describe('CityController', () => {
   // controller
   let controller: CityController;
 
