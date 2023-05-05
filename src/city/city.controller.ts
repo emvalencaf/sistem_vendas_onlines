@@ -4,8 +4,7 @@ import { Controller, Get, Param } from '@nestjs/common';
 // services
 import { CityService } from './city.service';
 
-// entities
-import { CityEntity } from './entity/city.entity';
+// dtos
 import { ReturnedCityDTO } from './dtos/returned-city.dto';
 
 @Controller('cities')
