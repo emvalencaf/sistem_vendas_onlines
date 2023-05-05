@@ -38,13 +38,15 @@ export class UserController {
   }
   // Get all users
   @Get()
-  async getAllUsers(): Promise<ReturnedUserDTO[]> {
+  async getAll(): Promise<ReturnedUserDTO[]> {
     return (await this.userService.getAll()).map(
       (userEntity) => new ReturnedUserDTO(userEntity),
     );
   }
   @Get('/:userId')
-  async getById(@Param('userId') userId: number): Promise<UserEntity> {
-    return this.userService.getByIdWithRelations(userId);
+  async getById(@Param('userId') userId: number): Promise<ReturnedUserDTO> {
+    return new ReturnedUserDTO(
+      await this.userService.getByIdWithRelations(userId),
+    );
   }
 }
