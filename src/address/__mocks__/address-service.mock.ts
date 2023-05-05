@@ -1,6 +1,5 @@
 import { userEntityListMock } from '../../user/__mocks__/user-entity-list.mock';
 import { AddressService } from '../address.service';
-import { ReturnedAddressDTO } from '../dtos/returned-address.dto';
 import { addressEntityListMock } from './address-entity-list.mock';
 
 export const addressServiceMock = {

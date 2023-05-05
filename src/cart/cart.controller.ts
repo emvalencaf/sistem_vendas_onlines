@@ -1,3 +1,4 @@
+// decorators
 import {
   Body,
   Controller,
@@ -9,13 +10,17 @@ import {
   Param,
   Patch,
 } from '@nestjs/common';
-import { CartService } from './cart.service';
-import { Roles } from '../decorators/roles.decorator';
 import { UserType } from '../enums/user-types.enum';
-import { InsertInCartDTO } from './dtos/insert-in-cart.dto';
+import { Roles } from '../decorators/roles.decorator';
 import { UserId } from '../decorators/user-id.decorator';
-import { ReturnedCartDTO } from './dtos/returned-cart.dto';
 import { DeleteResult } from 'typeorm';
+
+// services
+import { CartService } from './cart.service';
+
+// dtos
+import { InsertInCartDTO } from './dtos/insert-in-cart.dto';
+import { ReturnedCartDTO } from './dtos/returned-cart.dto';
 import { UpdateInCartDTO } from './dtos/update-in-cart.dto';
 
 @Controller('carts')
@@ -71,7 +76,7 @@ export class CartController {
   // clear up cart
   @Roles(UserType.Admin, UserType.User)
   @Delete()
-  async clearCart(@UserId() userId: number): Promise<boolean> {
+  async clear(@UserId() userId: number): Promise<DeleteResult> {
     return this.cartService.clear(userId);
   }
 

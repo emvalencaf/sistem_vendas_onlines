@@ -12,6 +12,8 @@ export const cartServiceMock = {
       affected: 1,
       raw: [],
     } as DeleteResult),
+    updateProductIn: jest.fn().mockResolvedValue(cartEntityListMock[0]),
+    insertProductIn: jest.fn().mockResolvedValue(cartEntityListMock[0]),
     clear: jest.fn().mockResolvedValue({
       affected: 1,
       raw: [],

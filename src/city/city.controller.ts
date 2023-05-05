@@ -6,6 +6,7 @@ import { CityService } from './city.service';
 
 // entities
 import { CityEntity } from './entity/city.entity';
+import { ReturnedCityDTO } from './dtos/returned-city.dto';
 
 @Controller('cities')
 export class CityController {
@@ -15,7 +16,9 @@ export class CityController {
   @Get('/:stateId')
   async getAllByStateId(
     @Param('stateId') stateId: number,
-  ): Promise<CityEntity[]> {
-    return this.cityService.getAllByStateId(stateId);
+  ): Promise<ReturnedCityDTO[]> {
+    return (await this.cityService.getAllByStateId(stateId)).map(
+      (city) => new ReturnedCityDTO(city),
+    );
   }
 }
