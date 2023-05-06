@@ -1,5 +1,5 @@
 import { categoryEntityListMock } from '../../category/__mocks__/category-entity-list.mock';
-import { ProductEntity } from '../entity/product.entity';
+import { ProductEntity } from '../entities/product.entity';
 
 export const productEntityListMock: ProductEntity[] = [
   {

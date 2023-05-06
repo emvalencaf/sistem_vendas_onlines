@@ -5,7 +5,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { CartService } from '../cart.service';
 
 // entities
-import { CartEntity } from '../entity/cart.entity';
+import { CartEntity } from '../entities/cart.entity';
 import { DeleteResult } from 'typeorm';
 
 // mocks

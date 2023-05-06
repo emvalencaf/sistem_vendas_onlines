@@ -12,7 +12,7 @@ import { UserController } from './user.controller';
 import { UserService } from './user.service';
 
 // entities
-import { UserEntity } from './entity/user.entity';
+import { UserEntity } from './entities/user.entity';
 
 @Module({
   imports: [

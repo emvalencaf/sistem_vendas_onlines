@@ -1,5 +1,5 @@
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { AddressEntity } from '../entity/address.entity';
+import { AddressEntity } from '../entities/address.entity';
 import { addressEntityListMock } from './address-entity-list.mock';
 
 export const addressRepositoryMock = {

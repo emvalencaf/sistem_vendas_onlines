@@ -1,4 +1,4 @@
-import { CartEntity } from '../entity/cart.entity';
+import { CartEntity } from '../entities/cart.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { cartEntityListMock } from './cart-entity-list.mock';
 

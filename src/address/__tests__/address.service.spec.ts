@@ -1,6 +1,6 @@
 import { Repository } from 'typeorm';
 import { AddressService } from '../address.service';
-import { AddressEntity } from '../entity/address.entity';
+import { AddressEntity } from '../entities/address.entity';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { addressRepositoryMock } from '../__mocks__/address-repository.mock';

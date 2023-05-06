@@ -1,5 +1,5 @@
 import { stateEntityListMock } from '../../state/__mocks__/state-entity-list.mock';
-import { CityEntity } from '../entity/city.entity';
+import { CityEntity } from '../entities/city.entity';
 
 export const cityEntityListMock: CityEntity[] = [
   {

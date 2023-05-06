@@ -3,7 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 // entities
-import { AddressEntity } from './entity/address.entity';
+import { AddressEntity } from './entities/address.entity';
 
 // dtos
 import { CreateAddressDTO } from './dtos/create-address.dto';

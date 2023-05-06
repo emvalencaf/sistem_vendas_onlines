@@ -17,7 +17,7 @@ import { UpdateUserPasswordDTO } from './dtos/update-user-password.dto';
 import { CreateUserDTO } from './dtos/create-user.dto';
 
 // entities
-import { UserEntity } from './entity/user.entity';
+import { UserEntity } from './entities/user.entity';
 import { Repository, UpdateResult } from 'typeorm';
 
 // enums

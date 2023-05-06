@@ -4,7 +4,7 @@ import { userServiceMock } from '../__mocks__/user-service.mock';
 import { ReturnedUserDTO } from '../dtos/returned-user.dto';
 import { userEntityListMock } from '../__mocks__/user-entity-list.mock';
 import { createUserDTOMock } from '../__mocks__/user-create-dto.mock';
-import { UserEntity } from '../entity/user.entity';
+import { UserEntity } from '../entities/user.entity';
 
 describe('UserController', () => {
   // controller

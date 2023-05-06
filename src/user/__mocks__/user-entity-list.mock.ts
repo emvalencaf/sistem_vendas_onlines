@@ -1,5 +1,5 @@
 import { UserType } from '../../enums/user-types.enum';
-import { UserEntity } from '../entity/user.entity';
+import { UserEntity } from '../entities/user.entity';
 
 export const userEntityListMock: UserEntity[] = [
   {

@@ -18,7 +18,7 @@ import { CityService } from '../city/city.service';
 import { CreateAddressDTO } from './dtos/create-address.dto';
 
 // entities
-import { AddressEntity } from './entity/address.entity';
+import { AddressEntity } from './entities/address.entity';
 
 // enums
 import { UserType } from '../enums/user-types.enum';

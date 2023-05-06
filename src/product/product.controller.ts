@@ -17,7 +17,7 @@ import { ProductService } from './product.service';
 import { ReturnedProductDTO } from './dtos/returned-product.dto';
 import { Roles } from '../decorators/roles.decorator';
 import { UserType } from '../enums/user-types.enum';
-import { ProductEntity } from './entity/product.entity';
+import { ProductEntity } from './entities/product.entity';
 import { CreateProductDTO } from './dtos/create-product.dto';
 import { PartialUpdateProductDTO } from './dtos/partial-update-product.dto';
 import { UpdateProductDTO } from './dtos/update-product.dto';

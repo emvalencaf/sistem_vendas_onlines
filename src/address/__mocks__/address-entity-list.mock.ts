@@ -1,4 +1,4 @@
-import { AddressEntity } from '../entity/address.entity';
+import { AddressEntity } from '../entities/address.entity';
 
 export const addressEntityListMock: AddressEntity[] = [
   {

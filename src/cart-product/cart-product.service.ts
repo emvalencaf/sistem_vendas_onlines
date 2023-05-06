@@ -4,7 +4,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CartProductEntity } from './entity/cart-product.entity';
+import { CartProductEntity } from './entities/cart-product.entity';
 import { DeleteResult, Repository } from 'typeorm';
 import { InsertInCartDTO } from '../cart/dtos/insert-in-cart.dto';
 import { ProductService } from '../product/product.service';

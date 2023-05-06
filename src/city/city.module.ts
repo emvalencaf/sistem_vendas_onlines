@@ -12,7 +12,7 @@ import { CityController } from './city.controller';
 import { CityService } from './city.service';
 
 // entities
-import { CityEntity } from './entity/city.entity';
+import { CityEntity } from './entities/city.entity';
 
 @Module({
   imports: [CacheModule, TypeOrmModule.forFeature([CityEntity])],

@@ -15,7 +15,7 @@ import { ReturnedUserDTO } from './dtos/returned-user.dto';
 
 // services
 import { UserService } from './user.service';
-import { UserEntity } from './entity/user.entity';
+import { UserEntity } from './entities/user.entity';
 
 // controller
 @Controller('users')

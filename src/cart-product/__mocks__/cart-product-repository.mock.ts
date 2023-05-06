@@ -1,5 +1,5 @@
 // entities and tools
-import { CartProductEntity } from '../entity/cart-product.entity';
+import { CartProductEntity } from '../entities/cart-product.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { DeleteResult } from 'typeorm';
 

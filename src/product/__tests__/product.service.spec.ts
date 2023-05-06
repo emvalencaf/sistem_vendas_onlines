@@ -5,7 +5,7 @@ import { categoryEntityListMock } from '../../category/__mocks__/category-entity
 import { productEntityListMock } from '../__mocks__/product-entity-list.mock';
 import { createProductDTOMock } from '../__mocks__/create-product-dto.mock';
 import { categoryServiceMock } from '../../category/__mocks__/category-service.mock';
-import { ProductEntity } from '../entity/product.entity';
+import { ProductEntity } from '../entities/product.entity';
 import { updateProductDTOMock } from '../__mocks__/update-product-dto.mock';
 import { partialUpdateProductDTOMock } from '../__mocks__/partial-update-product.mock';
 import { UpdateResult } from 'typeorm';

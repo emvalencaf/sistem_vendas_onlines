@@ -2,7 +2,7 @@
 import { ReturnedStateDTO } from '../../state/dtos/returned-state.dto';
 
 // entities
-import { CityEntity } from '../entity/city.entity';
+import { CityEntity } from '../entities/city.entity';
 
 export class ReturnedCityDTO {
   name: string;

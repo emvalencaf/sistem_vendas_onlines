@@ -4,7 +4,7 @@ import { ProductController } from '../product.controller';
 import { ReturnedProductDTO } from '../dtos/returned-product.dto';
 import { categoryEntityListMock } from '../../category/__mocks__/category-entity-list.mock';
 import { productEntityListMock } from '../__mocks__/product-entity-list.mock';
-import { ProductEntity } from '../entity/product.entity';
+import { ProductEntity } from '../entities/product.entity';
 import { updateProductDTOMock } from '../__mocks__/update-product-dto.mock';
 import { partialUpdateProductDTOMock } from '../__mocks__/partial-update-product.mock';
 import { createProductDTOMock } from '../__mocks__/create-product-dto.mock';

@@ -1,4 +1,4 @@
-import { StateEntity } from '../entity/state.entity';
+import { StateEntity } from '../entities/state.entity';
 
 export const stateEntityListMock: StateEntity[] = [
   {

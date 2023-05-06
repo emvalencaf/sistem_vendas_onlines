@@ -1,6 +1,6 @@
 import { Repository } from 'typeorm';
 import { StateService } from '../state.service';
-import { StateEntity } from '../entity/state.entity';
+import { StateEntity } from '../entities/state.entity';
 import { Test, TestingModule } from '@nestjs/testing';
 import { stateRepositoryMock } from '../__mocks__/state-repository.mock';
 import { getRepositoryToken } from '@nestjs/typeorm';

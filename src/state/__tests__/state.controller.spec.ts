@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { StateController } from '../state.controller';
 import { stateServiceMock } from '../__mocks__/state-service.mock';
-import { StateEntity } from '../entity/state.entity';
+import { StateEntity } from '../entities/state.entity';
 import { stateEntityListMock } from '../__mocks__/state-entity-list.mock';
 
 describe('StateController', () => {

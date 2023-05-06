@@ -1,5 +1,5 @@
 import { userEntityListMock } from '../../user/__mocks__/user-entity-list.mock';
-import { CartEntity } from '../entity/cart.entity';
+import { CartEntity } from '../entities/cart.entity';
 
 export const cartEntityListMock: CartEntity[] = [
   {

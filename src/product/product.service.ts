@@ -16,7 +16,7 @@ import { UpdateProductDTO } from './dtos/update-product.dto';
 import { PartialUpdateProductDTO } from './dtos/partial-update-product.dto';
 
 // entities
-import { ProductEntity } from './entity/product.entity';
+import { ProductEntity } from './entities/product.entity';
 import { Repository, UpdateResult } from 'typeorm';
 
 @Injectable()

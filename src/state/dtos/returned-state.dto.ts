@@ -1,5 +1,5 @@
 // entities
-import { StateEntity } from '../entity/state.entity';
+import { StateEntity } from '../entities/state.entity';
 
 export class ReturnedStateDTO {
   name: string;

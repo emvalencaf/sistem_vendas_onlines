@@ -2,7 +2,7 @@
 import { ReturnedCityDTO } from '../../city/dtos/returned-city.dto';
 
 // entities
-import { AddressEntity } from '../entity/address.entity';
+import { AddressEntity } from '../entities/address.entity';
 
 export class ReturnedAddressDTO {
   complement: string;

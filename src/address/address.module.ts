@@ -7,7 +7,7 @@ import { AddressController } from './address.controller';
 // services
 import { AddressService } from './address.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AddressEntity } from './entity/address.entity';
+import { AddressEntity } from './entities/address.entity';
 import { UserService } from '../user/user.service';
 import { CityService } from '../city/city.service';
 

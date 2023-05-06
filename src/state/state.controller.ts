@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { StateService } from './state.service';
-import { StateEntity } from './entity/state.entity';
+import { StateEntity } from './entities/state.entity';
 
 @Controller('states')
 export class StateController {

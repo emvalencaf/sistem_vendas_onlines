@@ -12,7 +12,7 @@ import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 
 // entities
-import { UserEntity } from '../user/entity/user.entity';
+import { UserEntity } from '../user/entities/user.entity';
 
 // dtos
 import { SignInDTO } from './dtos/sign-in.dto';

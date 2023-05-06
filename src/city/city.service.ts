@@ -8,7 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 // entities
-import { CityEntity } from './entity/city.entity';
+import { CityEntity } from './entities/city.entity';
 import { CacheService } from '../cache/cache.service';
 
 @Injectable()

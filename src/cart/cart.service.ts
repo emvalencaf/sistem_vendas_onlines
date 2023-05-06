@@ -7,7 +7,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 
 // entities
-import { CartEntity } from './entity/cart.entity';
+import { CartEntity } from './entities/cart.entity';
 import {
   DeleteResult,
   FindOptionsRelations,

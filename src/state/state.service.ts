@@ -1,6 +1,6 @@
 // decorators
 import { Injectable } from '@nestjs/common';
-import { StateEntity } from './entity/state.entity';
+import { StateEntity } from './entities/state.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 

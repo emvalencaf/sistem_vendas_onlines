@@ -9,7 +9,7 @@ import { productServiceMock } from '../../product/__mocks__/product-service.mock
 import { productEntityListMock } from '../../product/__mocks__/product-entity-list.mock';
 import { cartEntityListMock } from '../../cart/__mocks__/cart-entity-list.mock';
 import { cartProductEntityListMock } from '../__mocks__/cart-product-entity-list.mock';
-import { CartProductEntity } from '../entity/cart-product.entity';
+import { CartProductEntity } from '../entities/cart-product.entity';
 import { insertInCartDTOMock } from '../../cart/__mocks__/insert-in-cart-dto.mock';
 import { productRepositoryMock } from '../../product/__mocks__/product-repository.mock';
 import { DeleteResult } from 'typeorm';

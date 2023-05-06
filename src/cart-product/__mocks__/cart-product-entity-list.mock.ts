@@ -1,5 +1,5 @@
 // entities
-import { CartProductEntity } from '../entity/cart-product.entity';
+import { CartProductEntity } from '../entities/cart-product.entity';
 
 // mocks
 import { cartEntityListMock } from '../../cart/__mocks__/cart-entity-list.mock';

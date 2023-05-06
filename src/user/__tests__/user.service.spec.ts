@@ -7,7 +7,7 @@ import { UserService } from '../user.service';
 
 // entities
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { UserEntity } from '../entity/user.entity';
+import { UserEntity } from '../entities/user.entity';
 
 // mocks
 import { userRepositoryMock } from '../__mocks__/user-repository.mock';
