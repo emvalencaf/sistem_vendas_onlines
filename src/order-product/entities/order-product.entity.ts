@@ -4,6 +4,7 @@ import {
   Entity,
   JoinColumn,
   ManyToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { OrderEntity } from '../../order/entities/order.entity';
@@ -32,11 +33,11 @@ export class OrderProductEntity {
   @CreateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
-  @ManyToMany(() => OrderEntity, (order: OrderEntity) => order.orderProducts)
+  @ManyToOne(() => OrderEntity, (order: OrderEntity) => order.orderProducts)
   @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
   order?: OrderEntity;
 
-  @ManyToMany(
+  @ManyToOne(
     () => ProductEntity,
     (product: ProductEntity) => product.orderProducts,
   )

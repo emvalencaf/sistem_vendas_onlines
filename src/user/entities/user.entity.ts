@@ -43,6 +43,6 @@ export class UserEntity {
   @OneToMany(() => AddressEntity, (address) => address.user)
   addresses?: AddressEntity[];
 
-  @ManyToMany(() => OrderEntity, (order: OrderEntity) => order.user)
+  @OneToMany(() => OrderEntity, (order: OrderEntity) => order.user)
   orders?: OrderEntity[];
 }

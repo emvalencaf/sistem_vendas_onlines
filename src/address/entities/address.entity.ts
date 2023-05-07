@@ -4,8 +4,8 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
-  ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -53,6 +53,6 @@ export class AddressEntity {
   })
   city?: CityEntity;
 
-  @ManyToMany(() => OrderEntity, (order: OrderEntity) => order.address)
+  @OneToMany(() => OrderEntity, (order: OrderEntity) => order.address)
   orders?: OrderEntity[];
 }

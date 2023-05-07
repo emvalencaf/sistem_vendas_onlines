@@ -4,6 +4,7 @@ import {
   Entity,
   JoinColumn,
   ManyToMany,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -17,11 +18,11 @@ export class OrderEntity {
   @PrimaryGeneratedColumn('rowid')
   id: number;
   @Column({ name: 'user_id', nullable: false })
-  user_id: number;
+  userId: number;
   @Column({ name: 'payment_id', nullable: false })
-  payment_id: number;
+  paymentId: number;
   @Column({ name: 'address_id', nullable: false })
-  address_id: number;
+  addressId: number;
   @Column({ name: 'date', nullable: false })
   date: Date;
   @CreateDateColumn({ name: 'created_at' })
@@ -29,15 +30,15 @@ export class OrderEntity {
   @CreateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
-  @ManyToMany(() => UserEntity, (user: UserEntity) => user.orders)
+  @ManyToOne(() => UserEntity, (user: UserEntity) => user.orders)
   @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
   user?: UserEntity;
 
-  @ManyToMany(() => AddressEntity, (address: AddressEntity) => address.orders)
+  @ManyToOne(() => AddressEntity, (address: AddressEntity) => address.orders)
   @JoinColumn({ name: 'address_id', referencedColumnName: 'id' })
   address?: AddressEntity;
 
-  @ManyToMany(() => PaymentEntity, (payment: PaymentEntity) => payment.orders)
+  @ManyToOne(() => PaymentEntity, (payment: PaymentEntity) => payment.orders)
   @JoinColumn({ name: 'payment_id', referencedColumnName: 'id' })
   payment?: PaymentEntity;
 

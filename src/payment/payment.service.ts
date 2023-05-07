@@ -26,6 +26,8 @@ export class PaymentService {
     products: ProductEntity[],
     cartProducts: CartProductEntity[],
   ): number {
+    if (!cartProducts || cartProducts.length === 0) return 0;
+
     return cartProducts
       .map((cartProduct) => {
         // get related product

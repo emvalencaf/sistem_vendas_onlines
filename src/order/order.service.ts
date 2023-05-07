@@ -1,3 +1,4 @@
+// decorators and exceptions
 import {
   BadRequestException,
   Injectable,
@@ -5,15 +6,21 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { OrderEntity } from './entities/order.entity';
-import { Repository } from 'typeorm';
-import { CreateOrderDTO } from './dtos/create-order.dto';
-import { PaymentService } from '../payment/payment.service';
-import { PaymentEntity } from '../payment/entities/payment.entity';
+
+// services
 import { CartService } from '../cart/cart.service';
-import { CartEntity } from '../cart/entities/cart.entity';
+import { PaymentService } from '../payment/payment.service';
 import { OrderProductService } from '../order-product/order-product.service';
 import { ProductService } from '../product/product.service';
+
+// dtos
+import { CreateOrderDTO } from './dtos/create-order.dto';
+
+// entities
+import { OrderEntity } from './entities/order.entity';
+import { CartEntity } from '../cart/entities/cart.entity';
+import { Repository } from 'typeorm';
+import { PaymentEntity } from '../payment/entities/payment.entity';
 import { ProductEntity } from '../product/entities/product.entity';
 import { OrderProductEntity } from '../order-product/entities/order-product.entity';
 
@@ -112,5 +119,28 @@ export class OrderService {
     await this.cartService.clear(userId);
 
     return order;
+  }
+
+  // get an order (with its relations) by user id
+  async findByUserId(userId: number): Promise<OrderEntity[]> {
+    const orders: OrderEntity[] = await this.orderRepository.find({
+      where: {
+        userId,
+      },
+      relations: {
+        address: true,
+        orderProducts: {
+          product: true,
+        },
+        payment: {
+          status: true,
+        },
+      },
+    });
+
+    if (!orders || orders.length === 0)
+      throw new NotFoundException('no order found in database');
+
+    return orders;
   }
 }
