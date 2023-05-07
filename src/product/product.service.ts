@@ -17,7 +17,7 @@ import { PartialUpdateProductDTO } from './dtos/partial-update-product.dto';
 
 // entities
 import { ProductEntity } from './entities/product.entity';
-import { Repository, UpdateResult } from 'typeorm';
+import { FindManyOptions, In, Repository, UpdateResult } from 'typeorm';
 
 @Injectable()
 export class ProductService {
@@ -61,6 +61,25 @@ export class ProductService {
     if (!product) throw new InternalServerErrorException('error on database');
 
     return product;
+  }
+
+  // find all products by a list of product id
+  async findAllByIdList(productIds?: number[]): Promise<ProductEntity[]> {
+    const findOptions: FindManyOptions<ProductEntity> = {};
+
+    if (productIds && productIds.length > 0)
+      findOptions.where = {
+        id: In(productIds),
+      };
+
+    const products: ProductEntity[] = await this.productRepository.find(
+      findOptions,
+    );
+
+    if (!products || products.length === 0)
+      throw new NotFoundException('no product found in database');
+
+    return products;
   }
 
   // get all products from a category id

@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { OrderEntity } from './entities/order.entity';
@@ -12,6 +13,8 @@ import { PaymentEntity } from '../payment/entities/payment.entity';
 import { CartService } from '../cart/cart.service';
 import { CartEntity } from '../cart/entities/cart.entity';
 import { OrderProductService } from '../order-product/order-product.service';
+import { ProductService } from '../product/product.service';
+import { ProductEntity } from '../product/entities/product.entity';
 
 @Injectable()
 export class OrderService {
@@ -21,6 +24,7 @@ export class OrderService {
     private readonly paymentService: PaymentService,
     private readonly cartService: CartService,
     private readonly orderProductService: OrderProductService,
+    private readonly productService: ProductService,
   ) {}
 
   // create an order
@@ -55,15 +59,28 @@ export class OrderService {
     // get an activate cart (with all table relations) related to user
     const cart: CartEntity = await this.cartService.getByUserId(userId, true);
 
-    // create an order product
-    cart.cartProducts.forEach((cartProduct) => {
-      this.orderProductService.create({
-        productId: cartProduct.productId,
-        orderId: order.id,
-        amount: cartProduct.amount,
-        price: 0,
-      });
-    });
+    // validation checkin if active cart has products related to it
+    if (!cart.cartProducts || cart.cartProducts.length === 0)
+      throw new NotFoundException('no product was found related these cart id');
+
+    // get all products in an active cart
+    const products: ProductEntity[] = await this.productService.findAllByIdList(
+      cart.cartProducts.map((cartProduct) => cartProduct.productId),
+    );
+
+    // create an order
+    await Promise.all(
+      cart.cartProducts?.map((cartProduct) =>
+        this.orderProductService.create({
+          productId: cartProduct.productId,
+          orderId: order.id,
+          amount: cartProduct.amount,
+          price:
+            products.find((product) => product.id === cartProduct.productId)
+              ?.price || 0,
+        }),
+      ),
+    );
 
     return order;
   }
