@@ -7,7 +7,6 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { OrderEntity } from '../../order/entities/order.entity';
-import { ProductController } from '../../product/product.controller';
 import { ProductEntity } from '../../product/entities/product.entity';
 
 @Entity('order_product')
@@ -16,10 +15,10 @@ export class OrderProductEntity {
   id: number;
 
   @Column({ name: 'order_id', nullable: false })
-  order_id: number;
+  orderId: number;
 
   @Column({ name: 'product_id', nullable: false })
-  product_id: number;
+  productId: number;
 
   @Column({ name: 'amount', nullable: false })
   amount: number;

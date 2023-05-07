@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { OrderEntity } from '../../order/entities/order.entity';
 import { PaymentStatusEntity } from '../../payment-status/entities/payment-status.entity';
+import { PaymentDTO } from '../dtos/payment.dto';
 
 @Entity('payment')
 @TableInheritance({ column: { type: 'varchar', name: 'type' } })
@@ -17,13 +18,13 @@ export abstract class PaymentEntity {
   @PrimaryGeneratedColumn('rowid')
   id: number;
   @Column({ name: 'status_id', nullable: false })
-  status_id: number;
+  statusId: number;
   @Column({ name: 'price', nullable: false })
   price: number;
   @Column({ name: 'discount', nullable: false })
   discount: number;
   @Column({ name: 'final_price', nullable: false })
-  final_price: number;
+  finalPrice: number;
   @Column({ name: 'type', nullable: false })
   type: string;
   @CreateDateColumn({ name: 'created_at' })
@@ -40,4 +41,11 @@ export abstract class PaymentEntity {
   )
   @JoinColumn({ name: 'status_id', referencedColumnName: 'id' })
   status?: PaymentStatusEntity;
+
+  constructor({ statusId, price, discount, finalPrice }: PaymentDTO) {
+    this.statusId = statusId;
+    this.price = price;
+    this.discount = discount;
+    this.finalPrice = finalPrice;
+  }
 }
