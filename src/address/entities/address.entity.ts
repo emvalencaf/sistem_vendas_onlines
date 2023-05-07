@@ -4,12 +4,14 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { UserEntity } from '../../user/entities/user.entity';
 import { CityEntity } from '../../city/entities/city.entity';
+import { OrderEntity } from '../../order/entities/order.entity';
 
 @Entity({ name: 'address' })
 export class AddressEntity {
@@ -50,4 +52,7 @@ export class AddressEntity {
     referencedColumnName: 'id',
   })
   city?: CityEntity;
+
+  @ManyToMany(() => OrderEntity, (order: OrderEntity) => order.address)
+  orders?: OrderEntity[];
 }
