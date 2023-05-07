@@ -15,6 +15,7 @@ import { CartEntity } from '../cart/entities/cart.entity';
 import { OrderProductService } from '../order-product/order-product.service';
 import { ProductService } from '../product/product.service';
 import { ProductEntity } from '../product/entities/product.entity';
+import { OrderProductEntity } from '../order-product/entities/order-product.entity';
 
 @Injectable()
 export class OrderService {
@@ -27,34 +28,52 @@ export class OrderService {
     private readonly productService: ProductService,
   ) {}
 
-  // create an order
-  async create(
-    { addressId, code, datePayment, amountPayment }: CreateOrderDTO,
-    cartId: number,
+  // save an order
+  async save(
+    { addressId }: CreateOrderDTO,
     userId: number,
+    paymentId: number,
   ): Promise<OrderEntity> {
-    // validations
-    if (!addressId) throw new BadRequestException('no address was found');
-
-    // create a payment
-    const payment: PaymentEntity = await this.paymentService.create({
-      code,
-      datePayment,
-      amountPayment,
-    });
-
-    // create an order
-    const order: OrderEntity = await this.orderRepository
+    return this.orderRepository
       .save({
         addressId,
         date: new Date(),
-        paymentId: payment.id,
+        paymentId: paymentId,
         userId,
       })
       .catch((err) => {
         console.log(err);
         throw new InternalServerErrorException('error on database');
       });
+  }
+
+  // create a list of order products
+  async createOrderProducts(
+    cart: CartEntity,
+    orderId: number,
+    products: ProductEntity[],
+  ): Promise<OrderProductEntity[]> {
+    return Promise.all(
+      cart.cartProducts?.map((cartProduct) =>
+        this.orderProductService.create({
+          productId: cartProduct.productId,
+          orderId,
+          amount: cartProduct.amount,
+          price:
+            products.find((product) => product.id === cartProduct.productId)
+              ?.price || 0,
+        }),
+      ),
+    );
+  }
+
+  // create an order
+  async create(
+    { addressId, code, datePayment, amountPayment }: CreateOrderDTO,
+    userId: number,
+  ): Promise<OrderEntity> {
+    // validations
+    if (!addressId) throw new BadRequestException('no address was found');
 
     // get an activate cart (with all table relations) related to user
     const cart: CartEntity = await this.cartService.getByUserId(userId, true);
@@ -68,19 +87,29 @@ export class OrderService {
       cart.cartProducts.map((cartProduct) => cartProduct.productId),
     );
 
-    // create an order
-    await Promise.all(
-      cart.cartProducts?.map((cartProduct) =>
-        this.orderProductService.create({
-          productId: cartProduct.productId,
-          orderId: order.id,
-          amount: cartProduct.amount,
-          price:
-            products.find((product) => product.id === cartProduct.productId)
-              ?.price || 0,
-        }),
-      ),
+    // create a payment
+    const payment: PaymentEntity = await this.paymentService.create(
+      {
+        code,
+        datePayment,
+        amountPayment,
+      },
+      products,
+      cart,
     );
+
+    // create an order
+    const order: OrderEntity = await this.save(
+      { addressId },
+      userId,
+      payment.id,
+    );
+
+    // create an order prodcut
+    await this.createOrderProducts(cart, order.id, products);
+
+    // clear cart
+    await this.cartService.clear(userId);
 
     return order;
   }

@@ -16,11 +16,10 @@ export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
   // create an order
-  @Post('/cart/:cartId')
+  @Post()
   @UsePipes(ValidationPipe)
   async create(
     @Body() { amountPayment, code, datePayment, addressId }: CreateOrderDTO,
-    @Param('cartId') cartId: number,
     @UserId() userId: number,
   ): Promise<OrderEntity> {
     return this.orderService.create(
@@ -30,7 +29,6 @@ export class OrderController {
         datePayment,
         addressId,
       },
-      cartId,
       userId,
     );
   }
