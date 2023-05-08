@@ -23,12 +23,14 @@ import { Repository } from 'typeorm';
 import { PaymentEntity } from '../payment/entities/payment.entity';
 import { ProductEntity } from '../product/entities/product.entity';
 import { OrderProductEntity } from '../order-product/entities/order-product.entity';
+import { AddressService } from '../address/address.service';
 
 @Injectable()
 export class OrderService {
   constructor(
     @InjectRepository(OrderEntity)
     private readonly orderRepository: Repository<OrderEntity>,
+    private readonly addressService: AddressService,
     private readonly paymentService: PaymentService,
     private readonly cartService: CartService,
     private readonly orderProductService: OrderProductService,
@@ -80,14 +82,18 @@ export class OrderService {
     userId: number,
   ): Promise<OrderEntity> {
     // validations
-    if (!addressId) throw new BadRequestException('no address was found');
+    if (!addressId) throw new BadRequestException('address is required');
+
+    await this.addressService.exist(addressId);
 
     // get an activate cart (with all table relations) related to user
     const cart: CartEntity = await this.cartService.getByUserId(userId, true);
 
     // validation checkin if active cart has products related to it
-    if (!cart.cartProducts || cart.cartProducts.length === 0)
-      throw new NotFoundException('no product was found related these cart id');
+    if (!cart?.cartProducts || cart?.cartProducts?.length === 0)
+      throw new NotFoundException(
+        'no product was found related to this cart id',
+      );
 
     // get all products in an active cart
     const products: ProductEntity[] = await this.productService.findAllByIdList(
@@ -112,7 +118,7 @@ export class OrderService {
       payment.id,
     );
 
-    // create an order prodcut
+    // create an order product
     await this.createOrderProducts(cart, order.id, products);
 
     // clear cart

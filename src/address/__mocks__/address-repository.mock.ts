@@ -7,5 +7,6 @@ export const addressRepositoryMock = {
   useValue: {
     save: jest.fn().mockResolvedValue(addressEntityListMock[0]),
     find: jest.fn().mockRejectedValue(addressEntityListMock),
+    exist: jest.fn().mockResolvedValue(true),
   },
 };

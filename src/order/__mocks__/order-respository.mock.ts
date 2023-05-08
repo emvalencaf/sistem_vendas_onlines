@@ -9,7 +9,7 @@ export const orderRepositoryMock = {
   useValue: {
     save: jest.fn().mockResolvedValue({
       ...orderEntityListMock[0],
-      ...createOrderListDTOMock[0],
+      addressId: createOrderListDTOMock[0].addressId,
     }),
     find: jest
       .fn()

@@ -46,8 +46,21 @@ export class AddressService {
       })
       .catch(() => undefined);
 
-    if (!addresses) throw new NotFoundException('addresses not found it');
+    if (!addresses) throw new NotFoundException('no address found in database');
 
     return addresses;
+  }
+
+  // exists address for validations
+  async exist(addressId: number): Promise<boolean> {
+    const result: boolean = await this.addressRepository.exist({
+      where: {
+        id: addressId,
+      },
+    });
+
+    if (!result) throw new NotFoundException('address doesnt exists');
+
+    return result;
   }
 }

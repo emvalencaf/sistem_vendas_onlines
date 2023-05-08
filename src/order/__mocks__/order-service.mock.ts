@@ -3,7 +3,7 @@ import { OrderService } from '../order.service';
 import { createOrderListDTOMock } from './create-order-list-dto.mock';
 import { orderEntityListMock } from './order-entity-list.mock';
 
-export const orderService = {
+export const orderServiceMock = {
   provide: OrderService,
   useValue: {
     create: jest.fn().mockResolvedValue({

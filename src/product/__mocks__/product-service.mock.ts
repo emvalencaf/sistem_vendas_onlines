@@ -31,5 +31,6 @@ export const productServiceMock = {
     }),
     getById: jest.fn().mockResolvedValue(cityEntityListMock[0]),
     delete: jest.fn().mockResolvedValue(true),
+    findAllByIdList: jest.fn().mockRejectedValue(productEntityListMock),
   },
 };

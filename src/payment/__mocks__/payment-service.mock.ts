@@ -8,8 +8,7 @@ export const paymentServiceMock = {
     // will save a credit card payment by default
     create: jest.fn().mockResolvedValue({
       ...paymentEntityListMock[0],
-      ...createOrderListDTOMock[0],
     }),
-    calculatingTotalPrice: jest.fn().mockResolvedValue(20),
+    calculatingTotalPrice: jest.fn().mockResolvedValue(5),
   },
 };

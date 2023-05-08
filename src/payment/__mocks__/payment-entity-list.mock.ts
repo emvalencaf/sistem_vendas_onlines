@@ -2,12 +2,13 @@ import { paymentStatusEntityListMock } from '../../payment-status/__mocks__/paym
 import { PaymentEntity } from '../entities/payment.entity';
 
 export const paymentEntityListMock: PaymentEntity[] = [
+  // credit card
   {
     id: 1,
     type: 'credit_card',
     statusId: paymentStatusEntityListMock[0].id,
-    price: 10,
-    discount: 5,
+    price: 5,
+    discount: 0,
     finalPrice: 5,
     createdAt: new Date(),
     updatedAt: new Date(),

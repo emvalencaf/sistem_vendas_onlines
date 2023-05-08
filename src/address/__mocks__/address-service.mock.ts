@@ -13,5 +13,6 @@ export const addressServiceMock = {
           (address) => address.userId === userEntityListMock[0].id,
         ),
       ),
+    exist: jest.fn().mockResolvedValue(true),
   },
 };

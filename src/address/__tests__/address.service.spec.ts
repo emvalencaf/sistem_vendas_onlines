@@ -41,15 +41,49 @@ describe('AddressService', () => {
     });
   });
   describe('Read', () => {
-    it('should read all addresses of an user (getAllFromUser method)', async () => {
-      const result: AddressEntity[] = addressEntityListMock.filter(
-        (address) => address.userId === userEntityListMock[0].id,
-      );
-      jest
-        .spyOn(addressRepositoryMock.useValue, 'find')
-        .mockResolvedValueOnce(result);
-      const addresses = await service.getAllFromUser(userEntityListMock[0].id);
-      expect(addresses).toEqual(result);
+    describe('getAllFromUser method', () => {
+      it('should read all addresses of an user (getAllFromUser method)', async () => {
+        const result: AddressEntity[] = addressEntityListMock.filter(
+          (address) => address.userId === userEntityListMock[0].id,
+        );
+        jest
+          .spyOn(addressRepositoryMock.useValue, 'find')
+          .mockResolvedValueOnce(result);
+        const addresses = await service.getAllFromUser(
+          userEntityListMock[0].id,
+        );
+        expect(addresses).toEqual(result);
+      });
+      it('should throw a not found exception', async () => {
+        jest
+          .spyOn(addressRepositoryMock.useValue, 'find')
+          .mockResolvedValueOnce([]);
+        try {
+          await service.getAllFromUser(userEntityListMock[0].id);
+        } catch (err) {
+          expect(err.message).toEqual('no address found in database');
+        }
+      });
+    });
+    describe('exist method', () => {
+      it('should return a true value if address exists', async () => {
+        const result: boolean = await service.exist(
+          addressEntityListMock[0].id,
+        );
+        expect(result).toEqual(true);
+      });
+
+      it('should thrown a not found exception if address doesnt exists', async () => {
+        jest
+          .spyOn(addressRepositoryMock.useValue, 'exist')
+          .mockResolvedValue(false);
+
+        try {
+          await service.exist(addressEntityListMock[0].id);
+        } catch (err) {
+          expect(err.message).toEqual('address doesnt exists');
+        }
+      });
     });
   });
 });

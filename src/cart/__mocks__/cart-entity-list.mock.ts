@@ -9,6 +9,5 @@ export const cartEntityListMock: CartEntity[] = [
     active: true,
     updatedAt: new Date(),
     createdAt: new Date(),
-    cartProducts: cartProductEntityListMock,
   },
 ];
