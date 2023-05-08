@@ -10,5 +10,6 @@ export const paymentServiceMock = {
       ...paymentEntityListMock[0],
       ...createOrderListDTOMock[0],
     }),
+    calculatingTotalPrice: jest.fn().mockResolvedValue(20),
   },
 };

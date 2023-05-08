@@ -2,6 +2,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { OrderEntity } from '../entities/order.entity';
 import { orderEntityListMock } from './order-entity-list.mock';
 import { createOrderListDTOMock } from './create-order-list-dto.mock';
+import { userEntityListMock } from '../../user/__mocks__/user-entity-list.mock';
 
 export const orderRepositoryMock = {
   provide: getRepositoryToken(OrderEntity),
@@ -10,5 +11,12 @@ export const orderRepositoryMock = {
       ...orderEntityListMock[0],
       ...createOrderListDTOMock[0],
     }),
+    find: jest
+      .fn()
+      .mockResolvedValue(
+        orderEntityListMock.filter(
+          (order) => order.userId === userEntityListMock[0].id,
+        ),
+      ),
   },
 };
