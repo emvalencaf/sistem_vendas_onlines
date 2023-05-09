@@ -49,16 +49,15 @@ describe('OrderController', () => {
 
   describe('Read', () => {
     describe('findByUserId method', () => {
-      it('should return orders related to an user id',
-        async () => {
-          const expectedResult: OrderEntity[] = orderEntityListMock.filter(
-            (order) => order.userId === userEntityListMock[0].id,
-          );
-          const orders: OrderEntity[] = await controller.findByUserId(
-            userEntityListMock[0].id,
-          );
-          expect(orders).toEqual(expectedResult);
-        });
+      it('should return orders related to an user id', async () => {
+        const expectedResult: OrderEntity[] = orderEntityListMock.filter(
+          (order) => order.userId === userEntityListMock[0].id,
+        );
+        const orders: OrderEntity[] = await controller.findByUserId(
+          userEntityListMock[0].id,
+        );
+        expect(orders).toEqual(expectedResult);
+      });
     });
   });
 });

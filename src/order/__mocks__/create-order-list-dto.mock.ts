@@ -5,7 +5,7 @@ export const createOrderListDTOMock: CreateOrderDTO[] = [
   // payment with credit card
   {
     addressId: addressEntityListMock[0].id,
-    amountPayment: 210,
+    amountPayment: 8,
   },
   // payment with pix
   {
