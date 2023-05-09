@@ -8,7 +8,7 @@ export const orderServiceMock = {
   useValue: {
     create: jest.fn().mockResolvedValue({
       ...orderEntityListMock[0],
-      ...createOrderListDTOMock[0],
+      addressId: createOrderListDTOMock[0].addressId,
     }),
     save: jest.fn().mockResolvedValue({
       ...orderEntityListMock[0],

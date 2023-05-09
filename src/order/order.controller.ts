@@ -44,6 +44,6 @@ export class OrderController {
   @Get()
   @UsePipes(ValidationPipe)
   async findByUserId(@UserId() userId: number): Promise<OrderEntity[]> {
-    return this.findByUserId(userId);
+    return this.orderService.findByUserId(userId);
   }
 }

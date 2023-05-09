@@ -1,4 +1,3 @@
-import { cartProductEntityListMock } from '../../cart-product/__mocks__/cart-product-entity-list.mock';
 import { userEntityListMock } from '../../user/__mocks__/user-entity-list.mock';
 import { CartEntity } from '../entities/cart.entity';
 
