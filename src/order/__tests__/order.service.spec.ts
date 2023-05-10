@@ -52,7 +52,7 @@ describe('OrderService', () => {
             cartProducts: cartProductEntityListMock,
           });
         jest
-          .spyOn(productServiceMock.useValue, 'findAllByIdList')
+          .spyOn(productServiceMock.useValue, 'findAll')
           .mockResolvedValueOnce(
             productEntityListMock.filter(
               (product) =>

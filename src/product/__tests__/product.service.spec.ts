@@ -9,6 +9,7 @@ import { ProductEntity } from '../entities/product.entity';
 import { updateProductDTOMock } from '../__mocks__/update-product-dto.mock';
 import { partialUpdateProductDTOMock } from '../__mocks__/partial-update-product.mock';
 import { UpdateResult } from 'typeorm';
+import { ReturnedCategoryDTO } from '../../category/dtos/returned-category.dto';
 
 describe('ProductService', () => {
   let service: ProductService;
@@ -186,6 +187,64 @@ describe('ProductService', () => {
           await service.exist(productEntityListMock[0].id);
         } catch (err) {
           expect(err.message).toEqual('error on database');
+        }
+      });
+    });
+
+    describe('findAll method', () => {
+      it('should return all products in databse', async () => {
+        jest
+          .spyOn(productRepositoryMock.useValue, 'find')
+          .mockResolvedValueOnce(productEntityListMock);
+
+        const products: ProductEntity[] = await service.findAll();
+
+        expect(products).toEqual(products);
+      });
+
+      it('should return a list of products get by a list of ids', async () => {
+        const listProductId: number[] = [1, 2, 3];
+        const expectedResult: ProductEntity[] = productEntityListMock.filter(
+          (product) =>
+            product.id === listProductId.find((id) => id === product.id),
+        );
+        jest
+          .spyOn(productRepositoryMock.useValue, 'find')
+          .mockResolvedValueOnce(expectedResult);
+
+        const products: ProductEntity[] = await service.findAll(listProductId);
+
+        expect(products).toEqual(expectedResult);
+      });
+
+      it('should return a product with relations', async () => {
+        const expectedResult = productEntityListMock.map((product) => ({
+          ...product,
+          category: new ReturnedCategoryDTO(
+            categoryEntityListMock.find(
+              (category) => category.id === product.categoryId,
+            ),
+          ),
+        }));
+
+        jest
+          .spyOn(productRepositoryMock.useValue, 'find')
+          .mockResolvedValueOnce(expectedResult);
+
+        const products = await service.findAll(undefined, true);
+
+        expect(products).toEqual(expectedResult);
+      });
+
+      it('should throw a not found exception', async () => {
+        jest
+          .spyOn(productRepositoryMock.useValue, 'find')
+          .mockResolvedValueOnce([]);
+
+        try {
+          await service.findAll();
+        } catch (err) {
+          expect(err.message).toEqual('no product found in database');
         }
       });
     });

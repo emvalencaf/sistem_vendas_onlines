@@ -3,7 +3,6 @@ import { OrderProductService } from '../order-product.service';
 import { orderProductRepositoryMock } from '../__mocks__/order-product.entity-list.mock';
 import { OrderProductEntity } from '../entities/order-product.entity';
 import { orderProductEntityListMock } from '../__mocks__/order-product-repository.mock';
-import { createOrderListDTOMock } from '../../order/__mocks__/create-order-list-dto.mock';
 import { createOrderProductDTOMock } from '../__mocks__/create-order-product-dto.mock';
 
 describe('OrderProductService', () => {

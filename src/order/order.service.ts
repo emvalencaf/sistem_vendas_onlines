@@ -96,7 +96,7 @@ export class OrderService {
       );
 
     // get all products in an active cart
-    const products: ProductEntity[] = await this.productService.findAllByIdList(
+    const products: ProductEntity[] = await this.productService.findAll(
       cart.cartProducts.map((cartProduct) => cartProduct.productId),
     );
 

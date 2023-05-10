@@ -64,12 +64,20 @@ export class ProductService {
   }
 
   // find all products by a list of product id
-  async findAllByIdList(productIds?: number[]): Promise<ProductEntity[]> {
+  async findAll(
+    productIds?: number[],
+    isFindRelations?: boolean,
+  ): Promise<ProductEntity[]> {
     const findOptions: FindManyOptions<ProductEntity> = {};
 
     if (productIds && productIds.length > 0)
       findOptions.where = {
         id: In(productIds),
+      };
+
+    if (isFindRelations)
+      findOptions.relations = {
+        category: true,
       };
 
     const products: ProductEntity[] = await this.productRepository.find(
