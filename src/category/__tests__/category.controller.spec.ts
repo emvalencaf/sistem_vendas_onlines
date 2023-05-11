@@ -4,6 +4,7 @@ import { CategoryController } from '../category.controller';
 import { categoryEntityListMock } from '../__mocks__/category-entity-list.mock';
 import { ReturnedCategoryDTO } from '../dtos/returned-category.dto';
 import { createCategoryDTOMock } from '../__mocks__/create-category.mock';
+import { countProductDTOMock } from '../../product/__mocks__/count-product.mock';
 
 describe('CategoryController', () => {
   // controller
@@ -43,7 +44,13 @@ describe('CategoryController', () => {
     describe('getAll method', () => {
       it('should returned all categories', async () => {
         const result: ReturnedCategoryDTO[] = categoryEntityListMock.map(
-          (category) => new ReturnedCategoryDTO(category),
+          (category) =>
+            new ReturnedCategoryDTO(
+              category,
+              countProductDTOMock.find(
+                (count) => count.category_id === category.id,
+              ).total,
+            ),
         );
         const categories: ReturnedCategoryDTO[] = await controller.getAll();
 
