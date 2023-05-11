@@ -55,7 +55,7 @@ export class OrderController {
   @Get('/all')
   @UsePipes(ValidationPipe)
   async getAll(): Promise<ReturnedOrderDTO[]> {
-    return (await this.orderService.getAll()).map(
+    return (await this.orderService.getAll(true)).map(
       (order) => new ReturnedOrderDTO(order),
     );
   }

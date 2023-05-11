@@ -19,7 +19,7 @@ import { CreateOrderDTO } from './dtos/create-order.dto';
 // entities
 import { OrderEntity } from './entities/order.entity';
 import { CartEntity } from '../cart/entities/cart.entity';
-import { FindManyOptions, FindOptions, Repository } from 'typeorm';
+import { FindManyOptions, Repository } from 'typeorm';
 import { PaymentEntity } from '../payment/entities/payment.entity';
 import { ProductEntity } from '../product/entities/product.entity';
 import { OrderProductEntity } from '../order-product/entities/order-product.entity';

@@ -200,5 +200,42 @@ describe('OrderService', () => {
         }
       });
     });
+    describe('getAll method', () => {
+      it('should returned a list of order with no relations', async () => {
+        const expectedResult: OrderEntity[] = orderEntityListMock;
+        jest
+          .spyOn(orderRepositoryMock.useValue, 'find')
+          .mockResolvedValue(expectedResult);
+
+        const orders: OrderEntity[] = await service.getAll();
+
+        expect(orders).toEqual(expectedResult);
+      });
+      it('should returned a list of order with relations', async () => {
+        const expectedResult: OrderEntity[] = orderEntityListMock.map(
+          (order) => ({
+            ...order,
+            user: userEntityListMock.find((user) => user.id === order.userId),
+          }),
+        );
+
+        jest
+          .spyOn(orderRepositoryMock.useValue, 'find')
+          .mockResolvedValueOnce(expectedResult);
+
+        const orders: OrderEntity[] = await service.getAll(true);
+
+        expect(orders).toEqual(expectedResult);
+      });
+
+      it('should throw a not found exception', async () => {
+        jest.spyOn(orderRepositoryMock.useValue, 'find').mockResolvedValue([]);
+        try {
+          await service.getAll();
+        } catch (err) {
+          expect(err.message).toEqual('no order found in database');
+        }
+      });
+    });
   });
 });

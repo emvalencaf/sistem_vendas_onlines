@@ -9,6 +9,7 @@ import { OrderEntity } from '../entities/order.entity';
 import { createOrderListDTOMock } from '../__mocks__/create-order-list-dto.mock';
 import { userEntityListMock } from '../../user/__mocks__/user-entity-list.mock';
 import { orderEntityListMock } from '../__mocks__/order-entity-list.mock';
+import { ReturnedOrderDTO } from '../dtos/returned-order.dto';
 
 describe('OrderController', () => {
   let controller: OrderController;
@@ -56,6 +57,22 @@ describe('OrderController', () => {
         const orders: OrderEntity[] = await controller.findByUserId(
           userEntityListMock[0].id,
         );
+        expect(orders).toEqual(expectedResult);
+      });
+    });
+
+    describe('getAll method', () => {
+      it('should returned a list of orders', async () => {
+        const expectedResult: ReturnedOrderDTO[] = orderEntityListMock.map(
+          (order) =>
+            new ReturnedOrderDTO({
+              ...order,
+              user: userEntityListMock.find((user) => user.id === order.userId),
+            }),
+        );
+
+        const orders: ReturnedOrderDTO[] = await controller.getAll();
+
         expect(orders).toEqual(expectedResult);
       });
     });

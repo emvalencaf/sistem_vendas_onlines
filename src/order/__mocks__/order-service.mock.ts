@@ -21,5 +21,11 @@ export const orderServiceMock = {
           (order) => order.userId === userEntityListMock[0].id,
         ),
       ),
+    getAll: jest.fn().mockResolvedValue(
+      orderEntityListMock.map((order) => ({
+        ...order,
+        user: userEntityListMock.find((user) => user.id === order.userId),
+      })),
+    ),
   },
 };
