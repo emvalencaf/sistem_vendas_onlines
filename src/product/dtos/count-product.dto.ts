@@ -1,4 +1,4 @@
-export interface CountProduct {
-	category_id: number;
-	total: number;
+export interface CountProductDTO {
+  category_id: number;
+  total: number;
 }

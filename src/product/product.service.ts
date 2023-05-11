@@ -20,7 +20,7 @@ import { PartialUpdateProductDTO } from './dtos/partial-update-product.dto';
 // entities
 import { ProductEntity } from './entities/product.entity';
 import { FindManyOptions, In, Repository, UpdateResult } from 'typeorm';
-import { CountProduct } from './dtos/count-product.dto';
+import { CountProductDTO } from './dtos/count-product.dto';
 
 @Injectable()
 export class ProductService {
@@ -148,7 +148,7 @@ export class ProductService {
   }
 
   // get the count products by category id
-  async countByCategoryId(): Promise<CountProduct[]> {
+  async countByCategoryId(): Promise<CountProductDTO[]> {
     return this.productRepository
       .createQueryBuilder('product')
       .select('product.category_Id', 'COUNT(*) as total')

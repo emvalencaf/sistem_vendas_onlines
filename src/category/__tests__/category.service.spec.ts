@@ -4,12 +4,15 @@ import { categoryRepositoryMock } from '../__mocks__/category-repository.mock';
 import { CategoryEntity } from '../entity/category.entity';
 import { categoryEntityListMock } from '../__mocks__/category-entity-list.mock';
 import { createCategoryDTOMock } from '../__mocks__/create-category.mock';
+import { productServiceMock } from '../../product/__mocks__/product-service.mock';
+import { ReturnedCategoryDTO } from '../dtos/returned-category.dto';
+import { CountProductDTO } from '../../product/dtos/count-product.dto';
 describe('CategoryService', () => {
   let service: CategoryService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [CategoryService, categoryRepositoryMock],
+      providers: [CategoryService, categoryRepositoryMock, productServiceMock],
     }).compile();
 
     service = module.get<CategoryService>(CategoryService);
@@ -20,62 +23,90 @@ describe('CategoryService', () => {
   });
 
   describe('Create', () => {
-    it('should create a category (create method)', async () => {
-      const result: CategoryEntity = categoryEntityListMock[0];
+    describe('create method', () => {
+      it('should create a category (create method)', async () => {
+        const result: CategoryEntity = categoryEntityListMock[0];
 
-      jest
-        .spyOn(categoryRepositoryMock.useValue, 'save')
-        .mockResolvedValueOnce(result);
+        jest
+          .spyOn(categoryRepositoryMock.useValue, 'save')
+          .mockResolvedValueOnce(result);
 
-      const category = await service.create(createCategoryDTOMock);
+        const category = await service.create(createCategoryDTOMock);
 
-      expect(category).toEqual(result);
-    });
+        expect(category).toEqual(result);
+      });
 
-    it('should throw an error if wasnt fill the required fields (create method)', async () => {
-      jest
-        .spyOn(categoryRepositoryMock.useValue, 'save')
-        .mockRejectedValueOnce(new Error('name is required'));
+      it('should throw an error if wasnt fill the required fields (create method)', async () => {
+        jest
+          .spyOn(categoryRepositoryMock.useValue, 'save')
+          .mockRejectedValueOnce(new Error('name is required'));
 
-      try {
-        await service.create({
-          name: undefined,
-        });
-      } catch (err) {
-        expect(err.message).toEqual('name is required');
-      }
-    });
+        try {
+          await service.create({
+            name: undefined,
+          });
+        } catch (err) {
+          expect(err.message).toEqual('name is required');
+        }
+      });
 
-    it('should throw an error if already exists a category with the same name (create method)', async () => {
-      jest
-        .spyOn(categoryRepositoryMock.useValue, 'exist')
-        .mockRejectedValueOnce(new Error('category already exist'));
+      it('should throw an error if already exists a category with the same name (create method)', async () => {
+        jest
+          .spyOn(categoryRepositoryMock.useValue, 'exist')
+          .mockRejectedValueOnce(new Error('category already exist'));
 
-      try {
-        await service.create(createCategoryDTOMock);
-      } catch (err) {
-        expect(err.message).toEqual('category already exist');
-      }
-    });
+        try {
+          await service.create(createCategoryDTOMock);
+        } catch (err) {
+          expect(err.message).toEqual('category already exist');
+        }
+      });
 
-    it('should throw an error if occors an error in database while creating a category (create method)', async () => {
-      jest
-        .spyOn(categoryRepositoryMock.useValue, 'save')
-        .mockRejectedValueOnce(new Error('error on database'));
+      it('should throw an error if occors an error in database while creating a category (create method)', async () => {
+        jest
+          .spyOn(categoryRepositoryMock.useValue, 'save')
+          .mockRejectedValueOnce(new Error('error on database'));
 
-      try {
-        await service.create(createCategoryDTOMock);
-      } catch (err) {
-        expect(err.message).toEqual('error on database');
-      }
+        try {
+          await service.create(createCategoryDTOMock);
+        } catch (err) {
+          expect(err.message).toEqual('error on database');
+        }
+      });
     });
   });
   describe('Read', () => {
     describe('getAll method', () => {
       it('should returned an list of categories', async () => {
-        const categories: CategoryEntity[] = await service.getAll();
+        const countMock: CountProductDTO[] = categoryEntityListMock.map(
+          (category) => ({
+            category_id: category.id,
+            total: 5,
+          }),
+        );
 
-        expect(categories).toEqual(categoryEntityListMock);
+        const expectedResult: ReturnedCategoryDTO[] =
+          categoryEntityListMock.map(
+            (category) =>
+              new ReturnedCategoryDTO(
+                category,
+                countMock.find(
+                  (countProduct) => category.id === countProduct.category_id,
+                ).total,
+              ),
+          );
+
+        jest
+          .spyOn(productServiceMock.useValue, 'countByCategoryId')
+          .mockResolvedValueOnce(countMock);
+
+        jest
+          .spyOn(categoryRepositoryMock.useValue, 'find')
+          .mockResolvedValueOnce(categoryEntityListMock);
+
+        const categories: ReturnedCategoryDTO[] = await service.getAll();
+
+        expect(categories).toEqual(expectedResult);
       });
 
       it('should throw an error when fetch an empety list of categories', async () => {

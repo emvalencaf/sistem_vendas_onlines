@@ -12,7 +12,7 @@ import { Repository } from 'typeorm';
 import { CreateCategoryDTO } from './dtos/create-category.dto';
 import { ProductService } from '../product/product.service';
 import { ReturnedCategoryDTO } from './dtos/returned-category.dto';
-import { CountProduct } from '../product/dtos/count-product.dto';
+import { CountProductDTO } from '../product/dtos/count-product.dto';
 
 @Injectable()
 export class CategoryService {
@@ -73,7 +73,7 @@ export class CategoryService {
     );
   }
 
-  findAmountProductsIn(category: CategoryEntity, countList: CountProduct[]) {
+  findAmountProductsIn(category: CategoryEntity, countList: CountProductDTO[]) {
     const count = countList.find(
       (itemCount) => itemCount.category_id === category.id,
     );
