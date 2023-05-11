@@ -1,4 +1,5 @@
 import {
+  Column,
   CreateDateColumn,
   Entity,
   OneToMany,
@@ -10,6 +11,9 @@ import { PaymentEntity } from '../../payment/entities/payment.entity';
 export class PaymentStatusEntity {
   @PrimaryGeneratedColumn('rowid')
   id: number;
+
+  @Column({ name: 'name', nullable: false })
+  name: string;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

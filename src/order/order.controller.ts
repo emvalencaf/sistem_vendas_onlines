@@ -3,6 +3,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   UsePipes,
   ValidationPipe,
@@ -58,5 +59,13 @@ export class OrderController {
     return (await this.orderService.getAll(true)).map(
       (order) => new ReturnedOrderDTO(order),
     );
+  }
+
+  // get an order by id
+  @Roles(UserType.Admin)
+  @Get('/:orderId')
+  @UsePipes(ValidationPipe)
+  async getById(@Param('orderId') orderId: number): Promise<ReturnedOrderDTO> {
+    return new ReturnedOrderDTO(await this.orderService.getById(orderId, true));
   }
 }
