@@ -18,5 +18,6 @@ export const orderRepositoryMock = {
           (order) => order.userId === userEntityListMock[0].id,
         ),
       ),
+    findOne: jest.fn().mockResolvedValue(orderEntityListMock[0]),
   },
 };

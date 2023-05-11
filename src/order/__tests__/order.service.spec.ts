@@ -14,6 +14,8 @@ import { addressServiceMock } from '../../address/__mocks__/address-service.mock
 import { cartEntityListMock } from '../../cart/__mocks__/cart-entity-list.mock';
 import { cartProductEntityListMock } from '../../cart-product/__mocks__/cart-product-entity-list.mock';
 import { productEntityListMock } from '../../product/__mocks__/product-entity-list.mock';
+import { addressEntityListMock } from '../../address/__mocks__/address-entity-list.mock';
+import { orderProductEntityListMock } from '../../order-product/__mocks__/order-product-repository.mock';
 
 describe('OrderService', () => {
   let service: OrderService;
@@ -232,6 +234,51 @@ describe('OrderService', () => {
         jest.spyOn(orderRepositoryMock.useValue, 'find').mockResolvedValue([]);
         try {
           await service.getAll();
+        } catch (err) {
+          expect(err.message).toEqual('no order found in database');
+        }
+      });
+    });
+    describe('getById method', () => {
+      it('should returned a order without relations', async () => {
+        const order: OrderEntity = await service.getById(
+          orderEntityListMock[0].id,
+        );
+        expect(order).toEqual(orderEntityListMock[0]);
+      });
+      it('should returned a order with relations', async () => {
+        const expectedResult: OrderEntity = {
+          ...orderEntityListMock[0],
+          user: userEntityListMock.find(
+            (user) => user.id === orderEntityListMock[0].userId,
+          ),
+          payment: paymentEntityListMock.find(
+            (payment) => payment.id === orderEntityListMock[0].paymentId,
+          ),
+          address: addressEntityListMock.find(
+            (address) => address.id === orderEntityListMock[0].addressId,
+          ),
+          orderProducts: orderProductEntityListMock.filter(
+            (orderProduct) =>
+              orderProduct.orderId === orderEntityListMock[0].id,
+          ),
+        };
+        jest
+          .spyOn(orderRepositoryMock.useValue, 'findOne')
+          .mockResolvedValueOnce(expectedResult);
+        const order: OrderEntity = await service.getById(
+          orderEntityListMock[0].id,
+          true,
+        );
+
+        expect(order).toEqual(expectedResult);
+      });
+      it('should throw a not found exception', async () => {
+        jest
+          .spyOn(orderRepositoryMock.useValue, 'findOne')
+          .mockResolvedValueOnce(undefined);
+        try {
+          await service.getById(orderEntityListMock[0].id);
         } catch (err) {
           expect(err.message).toEqual('no order found in database');
         }

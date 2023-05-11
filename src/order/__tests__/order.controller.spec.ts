@@ -10,6 +10,9 @@ import { createOrderListDTOMock } from '../__mocks__/create-order-list-dto.mock'
 import { userEntityListMock } from '../../user/__mocks__/user-entity-list.mock';
 import { orderEntityListMock } from '../__mocks__/order-entity-list.mock';
 import { ReturnedOrderDTO } from '../dtos/returned-order.dto';
+import { addressEntityListMock } from '../../address/__mocks__/address-entity-list.mock';
+import { paymentEntityListMock } from '../../payment/__mocks__/payment-entity-list.mock';
+import { orderProductEntityListMock } from '../../order-product/__mocks__/order-product-repository.mock';
 
 describe('OrderController', () => {
   let controller: OrderController;
@@ -74,6 +77,37 @@ describe('OrderController', () => {
         const orders: ReturnedOrderDTO[] = await controller.getAll();
 
         expect(orders).toEqual(expectedResult);
+      });
+    });
+
+    describe('getById method', () => {
+      it('should returned a order by id with relations', async () => {
+        const expectedResultService: OrderEntity = {
+          ...orderEntityListMock[0],
+          user: userEntityListMock.find(
+            (user) => user.id === orderEntityListMock[0].userId,
+          ),
+          payment: paymentEntityListMock.find(
+            (payment) => payment.id === orderEntityListMock[0].paymentId,
+          ),
+          address: addressEntityListMock.find(
+            (address) => address.id === orderEntityListMock[0].addressId,
+          ),
+          orderProducts: orderProductEntityListMock.filter(
+            (orderProduct) =>
+              orderProduct.orderId === orderEntityListMock[0].id,
+          ),
+        };
+        const expectedResult: ReturnedOrderDTO = new ReturnedOrderDTO(
+          expectedResultService,
+        );
+        jest
+          .spyOn(orderServiceMock.useValue, 'getById')
+          .mockResolvedValueOnce(expectedResultService);
+        const order: ReturnedOrderDTO = await controller.getById(
+          orderEntityListMock[0].id,
+        );
+        expect(order).toEqual(expectedResult);
       });
     });
   });
