@@ -6,9 +6,12 @@ export class ReturnedCategoryDTO {
   id: number;
   @IsString()
   name: string;
+  @IsNumber()
+  amountProducts?: number;
 
-  constructor(categoryEntity: CategoryEntity) {
+  constructor(categoryEntity: CategoryEntity, amountProducts?: number) {
     this.id = categoryEntity.id;
     this.name = categoryEntity.name;
+    this.amountProducts = amountProducts;
   }
 }

@@ -10,9 +10,7 @@ export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
   @Get()
   async getAll(): Promise<ReturnedCategoryDTO[]> {
-    return (await this.categoryService.getAll()).map(
-      (category) => new ReturnedCategoryDTO(category),
-    );
+    return this.categoryService.getAll();
   }
 
   @Roles(UserType.Admin)
