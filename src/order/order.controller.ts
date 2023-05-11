@@ -17,6 +17,9 @@ import { CreateOrderDTO } from './dtos/create-order.dto';
 
 // entities
 import { OrderEntity } from './entities/order.entity';
+import { Roles } from '../decorators/roles.decorator';
+import { UserType } from '../enums/user-types.enum';
+import { ReturnedOrderDTO } from './dtos/returned-order.dto';
 
 @Controller('orders')
 export class OrderController {
@@ -45,5 +48,15 @@ export class OrderController {
   @UsePipes(ValidationPipe)
   async findByUserId(@UserId() userId: number): Promise<OrderEntity[]> {
     return this.orderService.findByUserId(userId);
+  }
+
+  // get all users
+  @Roles(UserType.Admin)
+  @Get('/all')
+  @UsePipes(ValidationPipe)
+  async getAll(): Promise<ReturnedOrderDTO[]> {
+    return (await this.orderService.getAll()).map(
+      (order) => new ReturnedOrderDTO(order),
+    );
   }
 }

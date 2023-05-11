@@ -1,7 +1,7 @@
 import { categoryEntityListMock } from '../../category/__mocks__/category-entity-list.mock';
 import { cityEntityListMock } from '../../city/__mocks__/city-entity-list.mock';
 import { ProductService } from '../product.service';
-import { countProductMock } from './count-product.mock';
+import { countProductDTOMock } from './count-product.mock';
 import { createProductDTOMock } from './create-product-dto.mock';
 import { partialUpdateProductDTOMock } from './partial-update-product.mock';
 import { productEntityListMock } from './product-entity-list.mock';
@@ -33,6 +33,6 @@ export const productServiceMock = {
     getById: jest.fn().mockResolvedValue(cityEntityListMock[0]),
     delete: jest.fn().mockResolvedValue(true),
     findAll: jest.fn().mockResolvedValue(productEntityListMock),
-    countByCategoryId: jest.fn().mockResolvedValue([countProductMock]),
+    countByCategoryId: jest.fn().mockResolvedValue(countProductDTOMock),
   },
 };

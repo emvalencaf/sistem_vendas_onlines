@@ -19,7 +19,7 @@ import { CreateOrderDTO } from './dtos/create-order.dto';
 // entities
 import { OrderEntity } from './entities/order.entity';
 import { CartEntity } from '../cart/entities/cart.entity';
-import { Repository } from 'typeorm';
+import { FindManyOptions, FindOptions, Repository } from 'typeorm';
 import { PaymentEntity } from '../payment/entities/payment.entity';
 import { ProductEntity } from '../product/entities/product.entity';
 import { OrderProductEntity } from '../order-product/entities/order-product.entity';
@@ -143,6 +143,23 @@ export class OrderService {
         },
       },
     });
+
+    if (!orders || orders.length === 0)
+      throw new NotFoundException('no order found in database');
+
+    return orders;
+  }
+
+  // get all orders
+  async getAll(isRelations?: boolean): Promise<OrderEntity[]> {
+    const findOptions: FindManyOptions<OrderEntity> = {};
+
+    if (isRelations)
+      findOptions.relations = {
+        user: true,
+      };
+
+    const orders: OrderEntity[] = await this.orderRepository.find(findOptions);
 
     if (!orders || orders.length === 0)
       throw new NotFoundException('no order found in database');
