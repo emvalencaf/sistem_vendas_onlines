@@ -149,11 +149,18 @@ export class ProductService {
 
   // get the count products by category id
   async countByCategoryId(): Promise<CountProductDTO[]> {
-    return this.productRepository
-      .createQueryBuilder('product')
-      .select('product.category_Id', 'COUNT(*) as total')
-      .groupBy('product.category_id')
-      .getRawMany();
+    try {
+      const count: CountProductDTO[] = await this.productRepository
+        .createQueryBuilder('product')
+        .select('product.category_Id', 'COUNT(*) as total')
+        .groupBy('product.category_id')
+        .getRawMany();
+
+      return count;
+    } catch (err) {
+      console.log(err);
+      throw new InternalServerErrorException('error on database');
+    }
   }
 
   // check if product exists

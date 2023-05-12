@@ -6,5 +6,6 @@ export const orderProductRepositoryMock = {
   provide: getRepositoryToken(OrderProductEntity),
   useValue: {
     save: jest.fn().mockResolvedValue(orderProductEntityListMock[0]),
+    find: jest.fn().mockResolvedValue(orderProductEntityListMock),
   },
 };

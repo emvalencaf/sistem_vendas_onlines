@@ -16,6 +16,8 @@ import { cartProductEntityListMock } from '../../cart-product/__mocks__/cart-pro
 import { productEntityListMock } from '../../product/__mocks__/product-entity-list.mock';
 import { addressEntityListMock } from '../../address/__mocks__/address-entity-list.mock';
 import { orderProductEntityListMock } from '../../order-product/__mocks__/order-product-repository.mock';
+import { returnedGroupOrderDTOMock } from '../../order-product/__mocks__/amount-product.mock';
+import { ReturnedOrderDTO } from '../dtos/returned-order.dto';
 
 describe('OrderService', () => {
   let service: OrderService;
@@ -204,7 +206,19 @@ describe('OrderService', () => {
     });
     describe('getAll method', () => {
       it('should returned a list of order with no relations', async () => {
-        const expectedResult: OrderEntity[] = orderEntityListMock;
+        const expectedResult: ReturnedOrderDTO[] = orderEntityListMock.map(
+          (order) =>
+            new ReturnedOrderDTO({
+              ...order,
+              date: order.date,
+              amountProducts: Number(
+                returnedGroupOrderDTOMock.find(
+                  (returnedGroupOrder) =>
+                    returnedGroupOrder.order_id === order.id,
+                ).total,
+              ),
+            }),
+        );
         jest
           .spyOn(orderRepositoryMock.useValue, 'find')
           .mockResolvedValue(expectedResult);
@@ -218,6 +232,12 @@ describe('OrderService', () => {
           (order) => ({
             ...order,
             user: userEntityListMock.find((user) => user.id === order.userId),
+            amountProducts: Number(
+              returnedGroupOrderDTOMock.find(
+                (returnedGroupOrder) =>
+                  returnedGroupOrder.order_id === order.id,
+              ).total,
+            ),
           }),
         );
 

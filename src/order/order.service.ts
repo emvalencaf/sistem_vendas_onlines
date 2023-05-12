@@ -24,6 +24,7 @@ import { PaymentEntity } from '../payment/entities/payment.entity';
 import { ProductEntity } from '../product/entities/product.entity';
 import { OrderProductEntity } from '../order-product/entities/order-product.entity';
 import { AddressService } from '../address/address.service';
+import { ReturnedGroupOrderDTO } from '../order-product/dtos/returned-group-order.dto';
 
 @Injectable()
 export class OrderService {
@@ -154,17 +155,38 @@ export class OrderService {
   async getAll(isRelations?: boolean): Promise<OrderEntity[]> {
     const findOptions: FindManyOptions<OrderEntity> = {};
 
+    // defined find many options
     if (isRelations)
       findOptions.relations = {
         user: true,
       };
 
+    // getting orders
     const orders: OrderEntity[] = await this.orderRepository.find(findOptions);
 
     if (!orders || orders.length === 0)
       throw new NotFoundException('no order found in database');
 
-    return orders;
+    // get order products amount
+    const ordersProduct: ReturnedGroupOrderDTO[] =
+      await this.orderProductService.getAmountProductById(
+        orders.map((order) => order.id),
+      );
+
+    return orders.map((order) => {
+      // order product to get amount
+      const orderProduct = ordersProduct.find(
+        (currentOrder) => currentOrder.order_id === order.id,
+      );
+
+      if (orderProduct)
+        return {
+          ...order,
+          amountProducts: Number(orderProduct.total),
+        };
+
+      return order;
+    });
   }
 
   // get order by id

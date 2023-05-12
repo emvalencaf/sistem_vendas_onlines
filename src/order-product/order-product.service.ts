@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { OrderProductEntity } from './entities/order-product.entity';
 import { Repository } from 'typeorm';
 import { CreateOrderProductDTO } from './dtos/create-order-product.dto';
+import { ReturnedGroupOrderDTO } from './dtos/returned-group-order.dto';
 
 @Injectable()
 export class OrderProductService {
@@ -40,5 +41,17 @@ export class OrderProductService {
         console.log(err);
         throw new InternalServerErrorException('error on database');
       });
+  }
+
+  // get amount of products by order id
+  async getAmountProductById(
+    orderId: number[],
+  ): Promise<ReturnedGroupOrderDTO[]> {
+    return this.orderProductRepository
+      .createQueryBuilder('order_product')
+      .select('order_product.order_id, COUNT(*) as total')
+      .where('order_product.order_id IN (:...ids)', { ids: orderId })
+      .groupBy('order_product.order_id')
+      .getRawMany();
   }
 }
