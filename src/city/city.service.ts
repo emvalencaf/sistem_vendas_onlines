@@ -30,7 +30,7 @@ export class CityService {
     );
   }
 
-  // get a cit by it's id
+  // get a city by it's id
   async getById(cityId: number): Promise<CityEntity> {
     const city = await this.cityRepository.findOne({
       where: {
@@ -39,6 +39,25 @@ export class CityService {
     });
 
     if (!city) throw new NotFoundException('city not found it');
+
+    return city;
+  }
+
+  // get a city by name
+  async FindCityByName(nameCity: string, uf: string): Promise<CityEntity> {
+    const city = await this.cityRepository.findOne({
+      where: {
+        name: nameCity,
+        state: {
+          uf,
+        },
+      },
+      relations: {
+        state: true,
+      },
+    });
+
+    if (!city) throw new NotFoundException('City not found');
 
     return city;
   }

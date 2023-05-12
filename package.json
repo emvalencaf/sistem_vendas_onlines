@@ -24,6 +24,7 @@
     "migrate:down": "npm run typeorm:ts migration:revert -- -d ./typeorm/data-source.ts"
   },
   "dependencies": {
+    "@nestjs/axios": "^2.0.0",
     "@nestjs/cache-manager": "^1.0.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.3.1",
@@ -77,12 +78,12 @@
     },
     "collectCoverageFrom": [
       "**/*.(t|j)s",
-	  "!**/migration/*",
-	  "!**/*.module.(t|j)s",
-	  "!**/*.dto.(t|j)s",
-	  "!**/*.entity.(t|j)s",
-	  "!**/*.decorator.(t|j)s",
-	  "!**/*.guard.(t|j)s"
+      "!**/migration/*",
+      "!**/*.module.(t|j)s",
+      "!**/*.dto.(t|j)s",
+      "!**/*.entity.(t|j)s",
+      "!**/*.decorator.(t|j)s",
+      "!**/*.guard.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
