@@ -16,6 +16,11 @@ import { AuthModule } from './auth/auth.module';
 import { CategoryModule } from './category/category.module';
 import { ProductModule } from './product/product.module';
 import { CartModule } from './cart/cart.module';
+import { CorreioModule } from './correios/correio.module';
+import { OrderModule } from './order/order.module';
+import { OrderProductModule } from './order-product/order-product.module';
+import { PaymentModule } from './payment/payment.module';
+import { PaymentStatusModule } from './payment-status/payment-status.module';
 
 @Module({
   imports: [
@@ -41,6 +46,11 @@ import { CartModule } from './cart/cart.module';
     ProductModule,
     JwtModule,
     CartModule,
+    CorreioModule,
+    OrderModule,
+    OrderProductModule,
+    PaymentModule,
+    PaymentStatusModule,
   ],
   controllers: [],
   providers: [
