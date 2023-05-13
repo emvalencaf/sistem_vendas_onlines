@@ -24,6 +24,7 @@ import { CountProductDTO } from './dtos/count-product.dto';
 import { SizeProductDTO } from '../correios/dtos/size-product.dto';
 import { CorreioService } from '../correios/correio.service';
 import { CdServiceEnum } from '../enums/correios/cd-service.enum';
+import { ReturnedFreightPriceDTO } from './dtos/returned-freight-price.dto';
 
 @Injectable()
 export class ProductService {
@@ -266,19 +267,33 @@ export class ProductService {
   }
 
   // get price delivery
-  async getFreightPrice(cep: string, productId: number): Promise<any> {
+  async getFreightPrice(
+    cep: string,
+    productId: number,
+  ): Promise<ReturnedFreightPriceDTO> {
     // getting product by id
     const product = await this.getById(productId);
 
     // getting de sizes details of the product
     const sizeProduct = new SizeProductDTO(product);
 
-    const returnedCorreios = await this.correiosService.getFreightPrice(
-      CdServiceEnum.PAC,
-      cep,
-      sizeProduct,
-    );
+    const returnedFreightPrices = await Promise.all([
+      this.correiosService.getFreightPrice(CdServiceEnum.PAC, cep, sizeProduct),
+      this.correiosService.getFreightPrice(
+        CdServiceEnum.SEDEX,
+        cep,
+        sizeProduct,
+      ),
+      this.correiosService.getFreightPrice(
+        CdServiceEnum.SEDEX_10,
+        cep,
+        sizeProduct,
+      ),
+    ]).catch((err) => {
+      console.log(err);
+      throw new BadRequestException('Error on get freight');
+    });
 
-    return returnedCorreios;
+    return new ReturnedFreightPriceDTO(returnedFreightPrices);
   }
 }

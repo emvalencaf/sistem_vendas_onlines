@@ -21,6 +21,7 @@ import { ProductEntity } from './entities/product.entity';
 import { CreateProductDTO } from './dtos/create-product.dto';
 import { PartialUpdateProductDTO } from './dtos/partial-update-product.dto';
 import { UpdateProductDTO } from './dtos/update-product.dto';
+import { ReturnedFreightPriceDTO } from './dtos/returned-freight-price.dto';
 
 @Controller('products')
 export class ProductController {
@@ -41,7 +42,7 @@ export class ProductController {
   async getFreightPrice(
     @Param('productId') productId: number,
     @Param('cep') cep: string,
-  ): Promise<any> {
+  ): Promise<ReturnedFreightPriceDTO> {
     return this.productService.getFreightPrice(cep, productId);
   }
 

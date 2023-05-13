@@ -18,6 +18,6 @@ export class SizeProductDTO {
     this.height = 30;
     this.width = 30;
     this.length = 30;
-	this.productValue = product.price;
+    this.productValue = product.price;
   }
 }
