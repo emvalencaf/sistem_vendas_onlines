@@ -36,6 +36,15 @@ export class ProductController {
     );
   }
 
+  // get freight price of an product by id and cep
+  @Get('/:productId/delivery/:cep')
+  async getFreightPrice(
+    @Param('productId') productId: number,
+    @Param('cep') cep: string,
+  ): Promise<any> {
+    return this.productService.getFreightPrice(cep, productId);
+  }
+
   // create a product
   @UsePipes(ValidationPipe)
   @Post()

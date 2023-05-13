@@ -21,6 +21,9 @@ import { PartialUpdateProductDTO } from './dtos/partial-update-product.dto';
 import { ProductEntity } from './entities/product.entity';
 import { FindManyOptions, In, Repository, UpdateResult } from 'typeorm';
 import { CountProductDTO } from './dtos/count-product.dto';
+import { SizeProductDTO } from '../correios/dtos/size-product.dto';
+import { CorreioService } from '../correios/correio.service';
+import { CdServiceEnum } from '../enums/correios/cd-service.enum';
 
 @Injectable()
 export class ProductService {
@@ -29,6 +32,7 @@ export class ProductService {
     private readonly productRepository: Repository<ProductEntity>,
     @Inject(forwardRef(() => CategoryService))
     private readonly categoryService: CategoryService,
+    private readonly correiosService: CorreioService,
   ) {}
 
   // create a new product
@@ -259,5 +263,22 @@ export class ProductService {
     const updated: ProductEntity = await this.getById(productId);
 
     return updated;
+  }
+
+  // get price delivery
+  async getFreightPrice(cep: string, productId: number): Promise<any> {
+    // getting product by id
+    const product = await this.getById(productId);
+
+    // getting de sizes details of the product
+    const sizeProduct = new SizeProductDTO(product);
+
+    const returnedCorreios = await this.correiosService.getFreightPrice(
+      CdServiceEnum.PAC,
+      cep,
+      sizeProduct,
+    );
+
+    return returnedCorreios;
   }
 }

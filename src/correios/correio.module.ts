@@ -3,6 +3,7 @@ import { CorreioService } from './correio.service';
 import { HttpModule } from '@nestjs/axios';
 import { CityModule } from '../city/city.module';
 import { SoapModule } from 'nestjs-soap';
+import { CorreioController } from './correio.controller';
 
 @Module({
   imports: [
@@ -16,8 +17,8 @@ import { SoapModule } from 'nestjs-soap';
     }),
     CityModule,
   ],
-  controllers: [],
+  controllers: [CorreioController],
   providers: [CorreioService],
-  exports: [],
+  exports: [CorreioService],
 })
 export class CorreioModule {}
