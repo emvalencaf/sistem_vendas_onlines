@@ -8,6 +8,7 @@ import { ProductEntity } from '../entities/product.entity';
 import { updateProductDTOMock } from '../__mocks__/update-product-dto.mock';
 import { partialUpdateProductDTOMock } from '../__mocks__/partial-update-product.mock';
 import { createProductDTOMock } from '../__mocks__/create-product-dto.mock';
+import { correioServiceMock } from '../../correios/__mocks__/correio-service.mock';
 
 describe('ProductController', () => {
   // controller
@@ -16,7 +17,7 @@ describe('ProductController', () => {
   beforeEach(async () => {
     // get mock module
     const module: TestingModule = await Test.createTestingModule({
-      providers: [productServiceMock],
+      providers: [productServiceMock, correioServiceMock],
       controllers: [ProductController],
     }).compile();
 

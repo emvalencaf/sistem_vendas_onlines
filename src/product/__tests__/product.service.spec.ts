@@ -10,13 +10,19 @@ import { updateProductDTOMock } from '../__mocks__/update-product-dto.mock';
 import { partialUpdateProductDTOMock } from '../__mocks__/partial-update-product.mock';
 import { UpdateResult } from 'typeorm';
 import { ReturnedCategoryDTO } from '../../category/dtos/returned-category.dto';
+import { correioServiceMock } from '../../correios/__mocks__/correio-service.mock';
 
 describe('ProductService', () => {
   let service: ProductService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [ProductService, categoryServiceMock, productRepositoryMock],
+      providers: [
+        ProductService,
+        correioServiceMock,
+        categoryServiceMock,
+        productRepositoryMock,
+      ],
     }).compile();
 
     service = module.get<ProductService>(ProductService);
@@ -423,7 +429,9 @@ describe('ProductService', () => {
         jest
           .spyOn(productRepositoryMock.useValue, 'update')
           .mockRejectedValueOnce(
-            new Error('name, price, image and category are required'),
+            new Error(
+              'name, price, image, category and product details are required',
+            ),
           );
 
         try {
@@ -433,7 +441,7 @@ describe('ProductService', () => {
           );
         } catch (err) {
           expect(err.message).toEqual(
-            'name, price, image and category are required',
+            'name, price, image, category and product details are required',
           );
         }
       });
