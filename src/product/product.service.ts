@@ -42,6 +42,11 @@ export class ProductService {
     price,
     image,
     categoryId,
+    length,
+    width,
+    height,
+    diameter,
+    weight,
   }: CreateProductDTO): Promise<ProductEntity> {
     // validation
     if (!name || !price || !image || !categoryId)
@@ -58,6 +63,11 @@ export class ProductService {
       price,
       image,
       categoryId,
+      length: length || 0,
+      width: width || 0,
+      height: height || 0,
+      diameter: diameter || 0,
+      weight: weight || 0,
     };
 
     const product: ProductEntity | undefined = await this.productRepository
@@ -189,7 +199,17 @@ export class ProductService {
 
   // partial update a product
   async partialUpdate(
-    { name, price, image, categoryId }: PartialUpdateProductDTO,
+    {
+      name,
+      price,
+      image,
+      categoryId,
+      height,
+      diameter,
+      weight,
+      length,
+      width,
+    }: PartialUpdateProductDTO,
     productId: number,
   ): Promise<ProductEntity> {
     await this.exist(productId);
@@ -203,6 +223,16 @@ export class ProductService {
     if (image) data.image = image;
 
     if (categoryId) data.categoryId = categoryId;
+
+    if (width) data.weight = weight;
+
+    if (height) data.height = height;
+
+    if (length) data.length = length;
+
+    if (weight) data.weight = weight;
+
+    if (diameter) data.diameter = diameter;
 
     const result: UpdateResult | undefined = await this.productRepository
       .update(
@@ -229,14 +259,34 @@ export class ProductService {
 
   // full update a product
   async update(
-    { name, price, image, categoryId }: UpdateProductDTO,
+    {
+      name,
+      price,
+      image,
+      categoryId,
+      diameter,
+      length,
+      width,
+      height,
+      weight,
+    }: UpdateProductDTO,
     productId: number,
   ): Promise<ProductEntity> {
     await this.exist(productId);
 
-    if (!name || !price || !image || !categoryId)
+    if (
+      !name ||
+      !price ||
+      !image ||
+      !categoryId ||
+      weight ||
+      !height ||
+      !width ||
+      !length ||
+      !diameter
+    )
       throw new BadRequestException(
-        'name, price, image and category are required',
+        'name, price, image, category and product details are required',
       );
 
     const data: UpdateProductDTO = {
@@ -244,6 +294,11 @@ export class ProductService {
       price,
       image,
       categoryId,
+      height,
+      diameter,
+      length,
+      width,
+      weight,
     };
 
     const result: UpdateResult | undefined = await this.productRepository

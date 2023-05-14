@@ -50,9 +50,30 @@ export class ProductController {
   @UsePipes(ValidationPipe)
   @Post()
   async create(
-    @Body() { name, price, image, categoryId }: CreateProductDTO,
+    @Body()
+    {
+      name,
+      price,
+      image,
+      categoryId,
+      height,
+      weight,
+      length,
+      width,
+      diameter,
+    }: CreateProductDTO,
   ): Promise<ProductEntity> {
-    return await this.productService.create({ name, price, image, categoryId });
+    return await this.productService.create({
+      name,
+      price,
+      image,
+      categoryId,
+      height,
+      weight,
+      length,
+      width,
+      diameter,
+    });
   }
 
   // delete a product
@@ -68,7 +89,18 @@ export class ProductController {
   @UsePipes(ValidationPipe)
   @Patch('/:productId')
   async partialUpdate(
-    @Body() { name, price, image, categoryId }: PartialUpdateProductDTO,
+    @Body()
+    {
+      name,
+      price,
+      image,
+      categoryId,
+      length,
+      diameter,
+      weight,
+      height,
+      width,
+    }: PartialUpdateProductDTO,
     @Param('productId') productId: number,
   ): Promise<ProductEntity> {
     return await this.productService.partialUpdate(
@@ -77,6 +109,11 @@ export class ProductController {
         price,
         image,
         categoryId,
+        width,
+        height,
+        weight,
+        diameter,
+        length,
       },
       productId,
     );
@@ -87,7 +124,18 @@ export class ProductController {
   @UsePipes(ValidationPipe)
   @Put('/:productId')
   async update(
-    @Body() { name, price, image, categoryId }: UpdateProductDTO,
+    @Body()
+    {
+      name,
+      price,
+      image,
+      categoryId,
+      weight,
+      diameter,
+      length,
+      height,
+      width,
+    }: UpdateProductDTO,
     @Param('productId') productId: number,
   ): Promise<ProductEntity> {
     return await this.productService.update(
@@ -96,6 +144,11 @@ export class ProductController {
         price,
         image,
         categoryId,
+        weight,
+        length,
+        diameter,
+        height,
+        width,
       },
       productId,
     );
