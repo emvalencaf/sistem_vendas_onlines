@@ -28,6 +28,7 @@ export class ReturnedCepInternalDTO {
       bairro,
       localidade,
       uf,
+      ddd,
     }: ReturnedCepExternalDTO,
     cityId?: number,
     stateId?: number,
@@ -38,6 +39,7 @@ export class ReturnedCepInternalDTO {
     this.city = localidade;
     this.neighborhood = bairro;
     this.uf = uf;
+    this.ddd = ddd;
     this.cityId = cityId ? cityId : undefined;
     this.stateId = stateId ? stateId : undefined;
   }

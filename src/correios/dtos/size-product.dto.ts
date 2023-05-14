@@ -11,13 +11,23 @@ export class SizeProductDTO {
   @IsNumber()
   diameter: number; // diameter in cm
   @IsNumber()
+  weight: number; // weight in kgs
+  @IsNumber()
   productValue: number;
 
-  constructor(product: ProductEntity) {
-    this.diameter = 30;
-    this.height = 30;
-    this.width = 30;
-    this.length = 30;
-    this.productValue = product.price;
+  constructor({
+    price,
+    diameter,
+    width,
+    height,
+    length,
+    weight,
+  }: ProductEntity) {
+    this.diameter = diameter;
+    this.height = height;
+    this.weight = weight;
+    this.width = width;
+    this.length = length;
+    this.productValue = price;
   }
 }

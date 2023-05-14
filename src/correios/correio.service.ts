@@ -55,14 +55,14 @@ export class CorreioService {
   async getFreightPrice(
     cdServico: string,
     cep: string,
-    { width, length, height, diameter, productValue }: SizeProductDTO,
+    { width, length, weight, height, diameter, productValue }: SizeProductDTO,
   ): Promise<any> {
     return new Promise((resolve, _) => {
       this.soapClient.CalcPrecoPrazo(
         {
           sCepOrigem: this.CEP_COMPANY, // zip-code where the product is
           sCepDestino: cep, // zip-code for delivery
-          nVlPeso: 2, // weight in kg
+          nVlPeso: weight, // weight in kg
           nCdFormato: CdFormatEnum.BOX, // type of packaging
           nCdServico: cdServico, // type of mailing service, ex: SEDEX, PAC
           nVlComprimento: length, // length in cm
